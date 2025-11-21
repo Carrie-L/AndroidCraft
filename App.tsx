@@ -190,10 +190,16 @@ const App: React.FC = () => {
 
   const isLessonLocked = (lessonId: string): boolean => {
     const allLessons = getAllLessons();
-    const index = allLessons.findIndex(l => l.id === lessonId);
-    if (index <= 0) return false;
-    const prevLesson = allLessons[index - 1];
-    return !completedLessons.has(prevLesson.id);
+    const lesson = allLessons.find(l => l.id === lessonId);
+    if (!lesson) return true;
+
+    // 公测阶段：对于已经配置了 contentUrl 的 Compose 小节，直接解锁（表示内容已准备好）
+    if (lesson.contentUrl) {
+      return false;
+    }
+
+    // 没有内容 URL，说明内容还没准备好：锁住
+    return true;
   };
 
   // --- Helper Functions for UI ---
@@ -243,6 +249,42 @@ const App: React.FC = () => {
 
   // Display all modules
   const displayedModules = CURRICULUM;
+
+  // 针对特定 Lesson（例如 1.1.1）从 public 目录加载外部 Markdown
+  const [resolvedLessonContent, setResolvedLessonContent] = useState<string>('');
+  const lessonBasePath = useMemo(() => {
+    if (!selectedLesson) return undefined;
+    // 如果有 contentUrl，就用它所在目录作为 basePath，方便解析 ![[xxx.png]]
+    if (selectedLesson.contentUrl) {
+      const url = selectedLesson.contentUrl;
+      const lastSlash = url.lastIndexOf('/');
+      if (lastSlash !== -1) {
+        return url.substring(0, lastSlash + 1); // 保留末尾斜杠
+      }
+    }
+    return undefined;
+  }, [selectedLesson]);
+
+  useEffect(() => {
+    if (!selectedLesson) {
+      setResolvedLessonContent('');
+      return;
+    }
+
+    // 如果 Lesson 配置了 contentUrl，则优先从 public/ 下加载 markdown
+    if (selectedLesson.contentUrl) {
+      const url = selectedLesson.contentUrl;
+      fetch(url)
+        .then((res) => res.text())
+        .then((text) => setResolvedLessonContent(text))
+        .catch(() => {
+          // 失败时退回到内联内容
+          setResolvedLessonContent(selectedLesson.content);
+        });
+    } else {
+      setResolvedLessonContent(selectedLesson.content);
+    }
+  }, [selectedLesson]);
 
   return (
     <div className={`min-h-screen font-sans selection:bg-pink-200 selection:text-pink-900 flex flex-col transition-colors duration-300 bg-[#FDFDFD] dark:bg-[#050a10]`}>
@@ -436,30 +478,8 @@ const App: React.FC = () => {
                       
                       const isSectionComplete = section.lessons.every(l => completedLessons.has(l.id));
                       
-                      return (
-                        <div key={section.id} className={`relative flex flex-col md:flex-row items-center w-full group/section`}>
-                           
-                           {/* Dotted Line Path */}
-                           {idx < selectedModule.sections.length - 1 && (
-                               <div className="hidden md:block absolute top-1/2 left-1/2 w-0 h-32 border-l-2 border-dashed border-slate-200 -z-10 transform translate-y-16"></div>
-                           )}
-
-                           {/* Center Number Node */}
-                           <div className="absolute left-6 md:left-1/2 transform md:-translate-x-1/2 flex items-center justify-center z-10">
-                                <div className={`w-16 h-16 ${isSectionComplete ? 'bg-[#3DDC84] text-white' : `${macaron.bg} ${macaron.text}`} rounded-full flex items-center justify-center shadow-sm border-[6px] border-[#FDFDFD] transition-all duration-500 group-hover/section:scale-110`}>
-                                    {isSectionComplete ? (
-                                        <Award size={28} className="animate-bounce-subtle" />
-                                    ) : (
-                                        <span className="text-2xl font-black">{idx + 1}</span>
-                                    )}
-                                </div>
-                           </div>
-
-                           {/* Horizontal Connector */}
-                           <div className={`hidden md:block absolute top-1/2 -translate-y-1/2 h-[2px] w-20 ${macaron.bg} ${isLeft ? 'right-1/2 mr-8' : 'left-1/2 ml-8'} rounded-full`}></div>
-
-                           {/* Section Card */}
-                           <div className={`w-full md:w-1/2 pl-24 md:pl-0 ${isLeft ? 'md:pr-28' : 'md:pl-28'}`}>
+                      const sectionCard = (
+                        <div className="w-full md:w-1/2 pl-24 md:pl-0 md:px-0">
                               <div className={`group relative bg-white rounded-[2rem] shadow-sm hover:shadow-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 ring-1 ring-slate-100`}>
                                  
                                  {/* Colored Header */}
@@ -524,9 +544,44 @@ const App: React.FC = () => {
 
                               </div>
                            </div>
-                           <div className="hidden md:block w-1/2"></div>
+                      );
+
+                      return (
+                        <div key={section.id} className={`relative flex flex-col md:flex-row items-center w-full group/section`}>
+                           
+                           {/* Dotted Line Path */}
+                           {idx < selectedModule.sections.length - 1 && (
+                               <div className="hidden md:block absolute top-1/2 left-1/2 w-0 h-32 border-l-2 border-dashed border-slate-200 -z-10 transform translate-y-16"></div>
+                           )}
+
+                           {/* Center Number Node */}
+                           <div className="absolute left-6 md:left-1/2 transform md:-translate-x-1/2 flex items-center justify-center z-10">
+                                <div className={`w-16 h-16 ${isSectionComplete ? 'bg-[#3DDC84] text-white' : `${macaron.bg} ${macaron.text}`} rounded-full flex items-center justify-center shadow-sm border-[6px] border-[#FDFDFD] transition-all duration-500 group-hover/section:scale-110`}>
+                                    {isSectionComplete ? (
+                                        <Award size={28} className="animate-bounce-subtle" />
+                                    ) : (
+                                        <span className="text-2xl font-black">{idx + 1}</span>
+                                    )}
+                                </div>
+                           </div>
+
+                           {/* Horizontal Connector */}
+                           <div className={`hidden md:block absolute top-1/2 -translate-y-1/2 h-[2px] w-20 ${macaron.bg} ${isLeft ? 'right-1/2 mr-8' : 'left-1/2 ml-8'} rounded-full`}></div>
+
+                           {/* Section Card：在桌面端左右交替分布 */}
+                           {isLeft ? (
+                             <>
+                               {sectionCard}
+                               <div className="hidden md:block w-1/2"></div>
+                             </>
+                           ) : (
+                             <>
+                               <div className="hidden md:block w-1/2"></div>
+                               {sectionCard}
+                             </>
+                           )}
                         </div>
-                      )
+                      );
                    })}
                    
                    {/* End */}
@@ -563,7 +618,7 @@ const App: React.FC = () => {
                   </div>
 
                   <div className="prose prose-slate prose-headings:font-black prose-p:text-slate-600 prose-p:font-medium prose-li:text-slate-600 max-w-none mb-12">
-                    <ComplexMarkdown content={selectedLesson.content} />
+                    <ComplexMarkdown content={resolvedLessonContent} basePath={lessonBasePath} />
                   </div>
 
                   {/* INTERACTIVE SECTIONS */}
@@ -736,7 +791,7 @@ const App: React.FC = () => {
             {/* RIGHT: AI Tutor Area */}
             <div className="w-full lg:w-1/3 h-1/3 lg:h-full bg-gray-50 border-t lg:border-t-0 lg:border-l border-gray-100 flex flex-col">
               <ChatInterface 
-                context={selectedLesson.content} 
+              context={resolvedLessonContent} 
                 lessonTitle={selectedLesson.title}
               />
             </div>

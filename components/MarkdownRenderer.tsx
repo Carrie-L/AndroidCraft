@@ -3,6 +3,8 @@ import { Layout, User, Heart, ThumbsUp, Apple } from 'lucide-react';
 
 interface MarkdownRendererProps {
   content: string;
+  // 用于解析相对图片路径（例如 ![[page1_img1.png]]），通常是以 / 开头的 URL 前缀
+  basePath?: string;
 }
 
 // --- UI Previews for Lessons ---
@@ -196,7 +198,7 @@ const PREVIEW_REGISTRY: Record<string, React.FC> = {
 
 // --- Main Renderer ---
 
-const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
+const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, basePath }) => {
   const lines = content.split('\n');
   
   return (
@@ -207,6 +209,51 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
         if (previewMatch) {
           const PreviewComponent = PREVIEW_REGISTRY[previewMatch[1]];
           return PreviewComponent ? <PreviewComponent key={index} /> : null;
+        }
+
+        // Obsidian 风格图片语法：![[path/to/image.png]]
+        const wikiImgMatch = line.match(/^!\[\[(.+?)\]\]\s*$/);
+        if (wikiImgMatch) {
+          const rawPath = wikiImgMatch[1].trim();
+
+          let src: string;
+          if (rawPath.startsWith('http://') || rawPath.startsWith('https://') || rawPath.startsWith('/')) {
+            // 已经是绝对 URL 或站点根路径，直接使用
+            src = rawPath;
+          } else if (basePath) {
+            // 使用调用方传入的 basePath（例如 /compose/1.1.1/）
+            src = `${basePath}${rawPath}`;
+          } else {
+            // 没有 basePath 就直接按给定路径使用
+            src = rawPath;
+          }
+
+          const fileName = rawPath.split('/').pop() || rawPath;
+          return (
+            <div key={index} className="my-6 flex justify-center">
+              <img
+                src={src}
+                alt={fileName}
+                className="max-w-full rounded-2xl shadow-lg border border-gray-200"
+              />
+            </div>
+          );
+        }
+
+        // 标准 Markdown 图片语法：![alt](url)
+        const mdImgMatch = line.match(/^!\[(.*?)\]\((.+?)\)\s*$/);
+        if (mdImgMatch) {
+          const alt = mdImgMatch[1] || '';
+          const src = mdImgMatch[2];
+          return (
+            <div key={index} className="my-6 flex justify-center">
+              <img
+                src={src}
+                alt={alt}
+                className="max-w-full rounded-2xl shadow-lg border border-gray-200"
+              />
+            </div>
+          );
         }
 
         // Headers
@@ -246,7 +293,12 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
   );
 };
 
-export const ComplexMarkdown: React.FC<{ content: string }> = ({ content }) => {
+interface ComplexMarkdownProps {
+  content: string;
+  basePath?: string;
+}
+
+export const ComplexMarkdown: React.FC<ComplexMarkdownProps> = ({ content, basePath }) => {
   // Split by code blocks first
   const segments = content.split(/(```[\s\S]*?```)/g);
 
@@ -274,7 +326,7 @@ export const ComplexMarkdown: React.FC<{ content: string }> = ({ content }) => {
           );
         }
         // Pass text segments to the inner renderer which handles lines and previews
-        return <MarkdownRenderer key={i} content={segment} />;
+        return <MarkdownRenderer key={i} content={segment} basePath={basePath} />;
       })}
     </div>
   );

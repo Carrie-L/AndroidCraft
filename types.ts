@@ -50,6 +50,8 @@ export interface Lesson {
   description: string;
   content: string; // Markdown content
   order: number;
+  // 可选：如果提供，则从 Vite public/ 根目录下按 URL 动态加载 markdown，而不是使用内联 content
+  contentUrl?: string;
   quiz?: Quiz;
   challenge?: Challenge;
 }

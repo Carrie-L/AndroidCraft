@@ -63,6 +63,7 @@ fun SimpleText() {
 }
 \`\`\`
             `,
+            contentUrl: '/compose/1.1.1/1.1.1 Composable_Spellbook.md',
             quiz: {
               id: 'quiz-1-1-1',
               question: '如果在普通函数 (非 Composable) 中调用 Text() 组件，会发生什么？',
