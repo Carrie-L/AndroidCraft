@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AndroidCraft AI - Best Practices</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            colors: {
+              android: {
+                light: '#3DDC84', // Classic Android Green
+                DEFAULT: '#3DDC84',
+                dark: '#32B36C',
+                navy: '#073042', // Modern Android Navy
+              },
+              cyber: {
+                pink: '#ff00ff',
+                cyan: '#00ffff',
+                yellow: '#fcee0a',
+                dark: '#050a10',
+                panel: 'rgba(13, 17, 23, 0.8)'
+              }
+            },
+            boxShadow: {
+              'neon': '0 0 5px theme("colors.android.DEFAULT"), 0 0 20px theme("colors.android.DEFAULT")',
+              'neon-blue': '0 0 5px #0ea5e9, 0 0 20px #0ea5e9',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        @apply bg-gray-100 dark:bg-[#050a10] text-slate-800 dark:text-e2e8f0 transition-colors duration-300;
+      }
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        @apply bg-gray-200 dark:bg-[#0d1117];
+      }
+      ::-webkit-scrollbar-thumb {
+        @apply bg-gray-400 dark:bg-slate-700 rounded;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        @apply bg-gray-500 dark:bg-slate-600;
+      }
+      
+      .cyber-grid {
+        background-size: 50px 50px;
+        background-image: 
+          linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+        mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
+      }
+      
+      .dark .cyber-grid {
+        background-image: 
+          linear-gradient(to right, rgba(61, 220, 132, 0.05) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(61, 220, 132, 0.05) 1px, transparent 1px);
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
