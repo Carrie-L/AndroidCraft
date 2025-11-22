@@ -12,8 +12,8 @@ export const TOPIC_CATEGORIES: TopicCategory[] = [
   },
   {
     id: 'kotlin',
-    title: 'Kotlin 语言专家',
-    description: '从基础语法到协程 (Coroutines) 和 Flow，掌握 Android 的首选语言。',
+    title: 'Network & API',
+    description: '任何 App 的血液。没有网络，App 只是一个孤岛。精通 Retrofit 与 OkHttp。',
     iconName: 'Code',
     color: 'bg-purple-500',
     isComingSoon: true
@@ -79,6 +79,7 @@ fun SimpleText() {
 }
 \`\`\`
             `,
+            // 漫话版（含图片）：无 @ 的 Spellbook 文件
             contentUrl: '/compose/1.1.1/1.1.1 Composable_Spellbook.md',
             quiz: {
               id: 'quiz-1-1-1',
@@ -117,6 +118,8 @@ fun SimpleText() {
             title: '1.1.2 数据驱动 UI',
             description: '掌握函数参数即 UI 状态、声明式范式及幂等性概念。',
             order: 2,
+            // 漫话版：无 @ 的 1.1.2.md，文字指南从 1.1.2@*.md 推导
+            contentUrl: '/compose/1.1.2/1.1.2.md',
             content: `
 # 1.1.2 数据驱动 UI
 
@@ -170,6 +173,8 @@ fun Greeting(name: String) {
 - **Column**：沿 Y 轴依次放置子元素。
 - **默认尺寸**：宽度包裹内容 (Wrap Content)，高度包裹内容。
             `,
+            // 漫话版：无 @ 的 1.2.1.md
+            contentUrl: '/compose/1.2.1/1.2.1.md',
             quiz: {
                 id: 'quiz-1-2-1',
                 question: 'Column 默认的宽度行为是什么？',
@@ -195,6 +200,8 @@ fun Greeting(name: String) {
 ### 示例：音乐播放条
 [[PREVIEW:SongRow]]
             `,
+            // 漫话版：无 @ 的 1.2.2.md
+            contentUrl: '/compose/1.2.2/1.2.2.md',
             challenge: {
               id: 'ch-1-2-2',
               title: '实践作业：构建用户标签',
@@ -222,7 +229,9 @@ fun UserLabel() {
             title: '1.2.3 叠加排列 (Box)',
             description: '掌握 Box 组件沿 Z 轴堆叠元素的特性。',
             order: 5,
-            content: '# 1.2.3 叠加排列 (Box)\n\nBox 类似于 FrameLayout，沿 Z 轴堆叠元素。'
+            content: '# 1.2.3 叠加排列 (Box)\n\nBox 类似于 FrameLayout，沿 Z 轴堆叠元素。',
+            // 漫话版：无 @ 的 1.2.3.md
+            contentUrl: '/compose/1.2.3/1.2.3.md'
           }
         ]
       },
@@ -231,9 +240,11 @@ fun UserLabel() {
         title: '1.3 布局对齐策略 (Alignment & Arrangement)',
         description: '核心能力：控制子元素在容器内的分布逻辑。',
         lessons: [
-          { id: 'lesson-1-3-1', title: '1.3.1 主轴与交叉轴概念', description: 'MainAxis vs CrossAxis', order: 6, content: 'Placeholder Content' },
-          { id: 'lesson-1-3-2', title: '1.3.2 主轴分布模式', description: 'Arrangement Modes', order: 7, content: 'Placeholder Content' },
-          { id: 'lesson-1-3-3', title: '1.3.3 交叉轴对齐模式', description: 'Alignment Modes', order: 8, content: 'Placeholder Content' }
+          // 1.3.1 目前只有 @ 文本版，先不配置 contentUrl，后续有漫画版再补
+          { id: 'lesson-1-3-1', title: '1.3.1 主轴与交叉轴概念', description: 'MainAxis vs CrossAxis', order: 6, content: 'Placeholder Content',contentUrl: '/compose/1.3.1/1.3.1.md' },
+          // 1.3.2 / 1.3.3 有无 @ 的 1.3.2.md / 1.3.3.md 作为漫话版
+          { id: 'lesson-1-3-2', title: '1.3.2 主轴分布模式', description: 'Arrangement Modes', order: 7, content: 'Placeholder Content', contentUrl: '/compose/1.3.2/1.3.2.md' },
+          { id: 'lesson-1-3-3', title: '1.3.3 交叉轴对齐模式', description: 'Alignment Modes', order: 8, content: 'Placeholder Content', contentUrl: '/compose/1.3.3/1.3.3.md' }
         ]
       },
       {
@@ -241,42 +252,9 @@ fun UserLabel() {
         title: '1.4 修饰符系统 (The Modifier System)',
         description: '核心能力：使用装饰器模式配置组件的外观与行为。',
         lessons: [
-          { id: 'lesson-1-4-1', title: '1.4.1 尺寸与约束', description: 'Sizing Constraints', order: 9, content: 'Placeholder Content' },
-          { id: 'lesson-1-4-2', title: '1.4.2 边距与背景', description: 'Padding & Background', order: 10, content: 'Placeholder Content' },
-          { 
-            id: 'lesson-1-4-3', 
-            title: '1.4.3 形状与裁剪', 
-            description: 'Shapes & Clipping', 
-            order: 11, 
-            content: `
-# 1.4.3 形状与裁剪
-
-## 理论核心
-- **clip()**：将内容裁剪为特定形状。
-- **顺序**：必须作用于绘制内容之前。
-
-[[PREVIEW:ArtistCard]]
-            `,
-            challenge: {
-              id: 'ch-1-4-3',
-              title: '实践作业：圆角卡片',
-              description: '创建一个 Box，100dp 大小，蓝色背景，裁剪为 16dp 圆角。',
-              hints: ['clip 在 background 之前'],
-              starterCode: `
-@Composable
-fun RoundedCard() {
-    // TODO
-}
-              `,
-              solutionCode: `
-@Composable
-fun RoundedCard() {
-    Box(modifier = Modifier.size(100.dp).clip(RoundedCornerShape(16.dp)).background(Color.Blue))
-}
-              `
-            }
-          },
-          { id: 'lesson-1-4-4', title: '1.4.4 点击与交互', description: 'Clickable & Interaction', order: 12, content: 'Placeholder Content' }
+          // 1.4.1 / 1.4.2 有无 @ 的 1.4.1.md / 1.4.2.md 作为漫话版
+          { id: 'lesson-1-4-1', title: '1.4.1 尺寸约束与边距背景', description: 'Sizing Constraints', order: 9, content: 'Placeholder Content', contentUrl: '/compose/1.4.1/1.4.1.md' },
+          { id: 'lesson-1-4-2', title: '1.4.2 形状裁剪与点击', description: 'Padding & Background', order: 10, content: 'Placeholder Content', contentUrl: '/compose/1.4.2/1.4.2.md' }
         ]
       }
     ]
@@ -313,6 +291,7 @@ val count = remember { mutableStateOf(0) }
 Button(onClick = { count.value++ }) { Text("\${count.value}") }
 \`\`\`
             `,
+            contentUrl: '/compose/2.1.1/2.1.1@MutableState 接口与状态创建.md',
             quiz: {
               id: 'quiz-2-1-1',
               question: '在一个 Button 的 onClick 中执行 count++，其中 count 是一个普通的 Int 变量。界面会刷新吗？',
@@ -338,6 +317,7 @@ Button(onClick = { count.value++ }) { Text("\${count.value}") }
 ### 互动演示：会变大的苹果
 [[PREVIEW:GrowingApple]]
             `,
+            contentUrl: '/compose/2.1.2/2.1.2@属性委托语法 (Property Delegation).md',
             challenge: {
               id: 'ch-2-1-2',
               title: '实践作业：属性委托计数器',
@@ -365,8 +345,8 @@ fun Counter() {
         title: '2.2 重组机制与作用域',
         description: '核心能力：理解 UI 刷新的范围与成本。',
         lessons: [
-          { id: 'lesson-2-2-1', title: '2.2.1 重组触发原理', description: 'Triggering Recomposition', order: 3, content: 'Placeholder' },
-          { id: 'lesson-2-2-2', title: '2.2.2 智能跳过', description: 'Intelligent Skipping', order: 4, content: 'Placeholder' }
+          { id: 'lesson-2-2-1', title: '2.2.1 重组触发原理', description: 'Triggering Recomposition', order: 3, content: 'Placeholder', contentUrl: '/compose/2.2.1/2.2.1@重组触发原理 (Triggering Recomposition).md' },
+          { id: 'lesson-2-2-2', title: '2.2.2 智能跳过', description: 'Intelligent Skipping', order: 4, content: 'Placeholder', contentUrl: '/compose/2.2.2/2.2.2@智能跳过 (Intelligent Skipping).md' }
         ]
       },
       {
@@ -374,8 +354,8 @@ fun Counter() {
         title: '2.3 组合内持久化',
         description: '核心能力：在函数反复执行的过程中保留数据。',
         lessons: [
-          { id: 'lesson-2-3-1', title: '2.3.1 remember 函数', description: 'Positional Memoization', order: 5, content: 'Placeholder' },
-          { id: 'lesson-2-3-2', title: '2.3.2 配置变更持久化', description: 'rememberSaveable', order: 6, content: 'Placeholder' }
+          { id: 'lesson-2-3-1', title: '2.3.1 remember 函数', description: 'Positional Memoization', order: 5, content: 'Placeholder', contentUrl: '/compose/2.3.1/2.3.1@remember 函数 (Positional Memoization).md' },
+          { id: 'lesson-2-3-2', title: '2.3.2 配置变更持久化', description: 'rememberSaveable', order: 6, content: 'Placeholder', contentUrl: '/compose/2.3.2/2.3.2@配置变更持久化 (rememberSaveable).md' }
         ]
       },
       {
@@ -383,8 +363,8 @@ fun Counter() {
         title: '2.4 状态流向与架构',
         description: '核心能力：解耦 UI 展示与状态逻辑。',
         lessons: [
-          { id: 'lesson-2-4-1', title: '2.4.1 单向数据流模式 (UDF)', description: 'Unidirectional Data Flow', order: 7, content: 'Placeholder' },
-          { id: 'lesson-2-4-2', title: '2.4.2 状态提升 (State Hoisting)', description: 'State Hoisting', order: 8, content: 'Placeholder' }
+          { id: 'lesson-2-4-1', title: '2.4.1 单向数据流模式 (UDF)', description: 'Unidirectional Data Flow', order: 7, content: 'Placeholder', contentUrl: '/compose/2.4.1/2.4.1@单向数据流模式 (Unidirectional Data Flow - UDF).md' },
+          { id: 'lesson-2-4-2', title: '2.4.2 状态提升 (State Hoisting)', description: 'State Hoisting', order: 8, content: 'Placeholder', contentUrl: '/compose/2.4.2/2.4.2@状态提升 (State Hoisting).md' }
         ]
       }
     ]
@@ -445,9 +425,9 @@ fun Counter() {
         title: '4.1 组合生命周期与副作用',
         description: '核心能力：在声明式 UI 框架中安全地执行命令式代码。',
         lessons: [
-          { id: 'lesson-4-1-1', title: '4.1.1 副作用概念 (LaunchedEffect)', description: 'LaunchedEffect', order: 1, content: 'Placeholder' },
-          { id: 'lesson-4-1-2', title: '4.1.2 协程作用域', description: 'rememberCoroutineScope', order: 2, content: 'Placeholder' },
-          { id: 'lesson-4-1-3', title: '4.1.3 资源清理效应', description: 'DisposableEffect', order: 3, content: 'Placeholder' }
+          { id: 'lesson-4-1-1', title: '4.1.1 副作用概念 (LaunchedEffect)', description: 'LaunchedEffect', order: 1, content: 'Placeholder', contentUrl: '/compose/4.1.1/4.1.1@副作用概念与受控执行 (LaunchedEffect).md' },
+          { id: 'lesson-4-1-2', title: '4.1.2 协程作用域', description: 'rememberCoroutineScope', order: 2, content: 'Placeholder', contentUrl: '/compose/4.1.2/4.1.2@组合感知的协程作用域 (rememberCoroutineScope).md' },
+          { id: 'lesson-4-1-3', title: '4.1.3 资源清理效应', description: 'DisposableEffect', order: 3, content: 'Placeholder', contentUrl: '/compose/4.1.3/4.1.3@资源清理效应 (DisposableEffect).md' }
         ]
       },
       {
