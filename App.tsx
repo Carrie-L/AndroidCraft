@@ -94,26 +94,26 @@ const App: React.FC = () => {
 
   // 2. Extended Random Macaron Palette for Inner Sections (Randomized)
   const RANDOM_PALETTES = [
-    { name: 'Candy',      bg: 'bg-[#FFC4C4]', text: 'text-[#D65A5A]', icon: 'bg-[#FF9E9E]' },
-    { name: 'Sky',        bg: 'bg-[#C4E4FF]', text: 'text-[#5A8DD6]', icon: 'bg-[#9ECAFF]' },
-    { name: 'Lemon',      bg: 'bg-[#FFF4C4]', text: 'text-[#D6B65A]', icon: 'bg-[#FFE69E]' },
-    { name: 'Lime',       bg: 'bg-[#C4FFD6]', text: 'text-[#5AD683]', icon: 'bg-[#9EFFBA]' },
-    { name: 'Lilac',      bg: 'bg-[#E4C4FF]', text: 'text-[#9E5AD6]', icon: 'bg-[#CA9EFF]' },
-    { name: 'Peach',      bg: 'bg-[#FFD6C4]', text: 'text-[#D6835A]', icon: 'bg-[#FFBA9E]' },
-    { name: 'Aqua',       bg: 'bg-[#C4FFF4]', text: 'text-[#5AD6BD]', icon: 'bg-[#9EFFF0]' },
-    { name: 'Sakura',     bg: 'bg-[#F8C8DC]', text: 'text-[#D45D88]', icon: 'bg-[#F2A2C0]' },
-    { name: 'Periwinkle', bg: 'bg-[#AECBEB]', text: 'text-[#4A7FB5]', icon: 'bg-[#8FB9E6]' },
-    { name: 'Mint',       bg: 'bg-[#B5EAD7]', text: 'text-[#57967D]', icon: 'bg-[#92E0C4]' },
-    { name: 'Butter',     bg: 'bg-[#E2F0CB]', text: 'text-[#8DA665]', icon: 'bg-[#CCE6A6]' },
-    { name: 'Apricot',    bg: 'bg-[#FFDAC1]', text: 'text-[#CC8A66]', icon: 'bg-[#FFC49E]' },
-    { name: 'Plum',       bg: 'bg-[#E0BBE4]', text: 'text-[#8A5691]', icon: 'bg-[#D29ED9]' },
-    { name: 'Berry',      bg: 'bg-[#FEC8D8]', text: 'text-[#C26882]', icon: 'bg-[#FD9EBC]' },
-    { name: 'Banana',     bg: 'bg-[#FFF2B2]', text: 'text-[#B5A048]', icon: 'bg-[#FFE885]' },
-    { name: 'Fern',       bg: 'bg-[#D6F6DD]', text: 'text-[#6CB57C]', icon: 'bg-[#AFF2BD]' },
-    { name: 'Ice',        bg: 'bg-[#D4F0F0]', text: 'text-[#669999]', icon: 'bg-[#AEE6E6]' },
-    { name: 'Sand',       bg: 'bg-[#F6EAC2]', text: 'text-[#A69357]', icon: 'bg-[#EFD994]' },
-    { name: 'Coral',      bg: 'bg-[#FFB7B2]', text: 'text-[#C25E58]', icon: 'bg-[#FF968F]' },
-    { name: 'Cloud',      bg: 'bg-[#E3F2FD]', text: 'text-[#448AFF]', icon: 'bg-[#90CAF9]' }
+    { name: 'Candy',      bg: 'bg-[#FFC4C4]', text: 'text-[#D65A5A]', icon: 'bg-[#FF9E9E]', light: 'bg-[#FFF5F5]' },
+    { name: 'Sky',        bg: 'bg-[#C4E4FF]', text: 'text-[#5A8DD6]', icon: 'bg-[#9ECAFF]', light: 'bg-[#F0F9FF]' },
+    { name: 'Lemon',      bg: 'bg-[#FFF4C4]', text: 'text-[#D6B65A]', icon: 'bg-[#FFE69E]', light: 'bg-[#FFFAEB]' },
+    { name: 'Lime',       bg: 'bg-[#C4FFD6]', text: 'text-[#5AD683]', icon: 'bg-[#9EFFBA]', light: 'bg-[#F0FFF4]' },
+    { name: 'Lilac',      bg: 'bg-[#E4C4FF]', text: 'text-[#9E5AD6]', icon: 'bg-[#CA9EFF]', light: 'bg-[#F8F0FF]' },
+    { name: 'Peach',      bg: 'bg-[#FFD6C4]', text: 'text-[#D6835A]', icon: 'bg-[#FFBA9E]', light: 'bg-[#FFF5EB]' },
+    { name: 'Aqua',       bg: 'bg-[#C4FFF4]', text: 'text-[#5AD6BD]', icon: 'bg-[#9EFFF0]', light: 'bg-[#F0FFFA]' },
+    { name: 'Sakura',     bg: 'bg-[#F8C8DC]', text: 'text-[#D45D88]', icon: 'bg-[#F2A2C0]', light: 'bg-[#FFF0F5]' },
+    { name: 'Periwinkle', bg: 'bg-[#AECBEB]', text: 'text-[#4A7FB5]', icon: 'bg-[#8FB9E6]', light: 'bg-[#F0F6FF]' },
+    { name: 'Mint',       bg: 'bg-[#B5EAD7]', text: 'text-[#57967D]', icon: 'bg-[#92E0C4]', light: 'bg-[#F0FFFA]' },
+    { name: 'Butter',     bg: 'bg-[#E2F0CB]', text: 'text-[#8DA665]', icon: 'bg-[#CCE6A6]', light: 'bg-[#F9FFE0]' },
+    { name: 'Apricot',    bg: 'bg-[#FFDAC1]', text: 'text-[#CC8A66]', icon: 'bg-[#FFC49E]', light: 'bg-[#FFF5EB]' },
+    { name: 'Plum',       bg: 'bg-[#E0BBE4]', text: 'text-[#8A5691]', icon: 'bg-[#D29ED9]', light: 'bg-[#F9F0FC]' },
+    { name: 'Berry',      bg: 'bg-[#FEC8D8]', text: 'text-[#C26882]', icon: 'bg-[#FD9EBC]', light: 'bg-[#FFF0F5]' },
+    { name: 'Banana',     bg: 'bg-[#FFF2B2]', text: 'text-[#B5A048]', icon: 'bg-[#FFE885]', light: 'bg-[#FFFEF0]' },
+    { name: 'Fern',       bg: 'bg-[#D6F6DD]', text: 'text-[#6CB57C]', icon: 'bg-[#AFF2BD]', light: 'bg-[#F0FFF5]' },
+    { name: 'Ice',        bg: 'bg-[#D4F0F0]', text: 'text-[#669999]', icon: 'bg-[#AEE6E6]', light: 'bg-[#F0FFFF]' },
+    { name: 'Sand',       bg: 'bg-[#F6EAC2]', text: 'text-[#A69357]', icon: 'bg-[#EFD994]', light: 'bg-[#FFFAEF]' },
+    { name: 'Coral',      bg: 'bg-[#FFB7B2]', text: 'text-[#C25E58]', icon: 'bg-[#FF968F]', light: 'bg-[#FFF0EF]' },
+    { name: 'Cloud',      bg: 'bg-[#E3F2FD]', text: 'text-[#448AFF]', icon: 'bg-[#90CAF9]', light: 'bg-[#F5F9FF]' }
   ];
 
   // Navigation Logic
@@ -381,56 +381,55 @@ const App: React.FC = () => {
             </div>
 
             {/* Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                {displayedModules.map((module, idx) => {
                  const palette = MODULE_PALETTES[idx % MODULE_PALETTES.length];
                  const sectionCount = module.sections.length;
                  const lessonCount = module.sections.reduce((acc, sec) => acc + sec.lessons.length, 0);
                  const completedInModule = module.sections.flatMap(s => s.lessons).filter(l => completedLessons.has(l.id)).length;
-                 const progress = Math.round((completedInModule / lessonCount) * 100) || 0;
-
+                 
                  return (
                    <div 
                       key={module.id}
                       onClick={() => handleModuleSelect(module)}
-                      className={`group flex flex-col h-full bg-white rounded-[2rem] overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-xl border-2 border-gray-50 hover:${palette.border}`}
+                      className={`group relative bg-white rounded-[2.5rem] overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)]`}
                    >
-                      {/* Card Header (Color) */}
-                      <div className={`h-32 ${palette.bg} p-6 relative flex flex-col justify-between overflow-hidden`}>
-                          {/* Large Number */}
-                          <span className="absolute -bottom-6 -right-2 text-9xl font-black text-black/5 select-none">
-                              {idx + 1}
-                          </span>
-                          
-                          <div className="flex justify-between items-start relative z-10">
-                              <div className="p-2 bg-white/40 backdrop-blur-md rounded-xl text-slate-800">
-                                  {getModuleIcon(module.iconName, 20)}
-                              </div>
-                              {getDifficultyBadge(module.difficulty)}
-                          </div>
-                      </div>
+                      {/* Top Color Blob (Corner) */}
+                      <div className={`absolute -right-10 -top-10 w-40 h-40 rounded-full ${palette.bg} opacity-20 blur-3xl group-hover:opacity-30 transition-opacity`}></div>
+                      <div className={`absolute -left-10 -bottom-10 w-32 h-32 rounded-full ${palette.bg} opacity-10 blur-3xl group-hover:opacity-20 transition-opacity`}></div>
 
-                      {/* Card Body (White) */}
-                      <div className="p-6 flex flex-col flex-grow">
-                          <h3 className={`text-xl font-extrabold text-slate-800 mb-2 group-hover:${palette.text} transition-colors`}>
+                      <div className="p-8 flex flex-col h-full relative z-10">
+                          {/* Icon Box */}
+                          <div className={`w-14 h-14 rounded-2xl ${palette.light} flex items-center justify-center ${palette.text} mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                              {getModuleIcon(module.iconName, 26)}
+                          </div>
+
+                          {/* Title & Desc */}
+                          <h3 className="text-xl font-black text-slate-800 mb-3 leading-tight">
                             {module.title.split('：')[1] || module.title}
                           </h3>
-                          <p className="text-sm text-slate-500 font-medium line-clamp-3 mb-6 flex-grow">
+                          <p className="text-sm text-slate-500 font-medium line-clamp-2 mb-8 flex-grow">
                             {module.description}
                           </p>
 
-                          {/* Progress */}
-                          <div className="space-y-3">
-                              <div className="flex justify-between text-xs font-bold text-slate-400">
-                                  <span>PROGRESS</span>
-                                  <span>{progress}%</span>
-                              </div>
-                              <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-                                  <div className={`h-full ${palette.bg} transition-all duration-500`} style={{ width: `${progress}%` }}></div>
+                          {/* Bottom Stats & Action */}
+                          <div className="flex items-end justify-between mt-auto">
+                              <div className="flex flex-col gap-1">
+                                  <div className={`flex items-center text-xs font-bold ${palette.text}`}>
+                                      {getModuleIcon(module.iconName, 12)}
+                                      <span className="ml-1">{module.title.split(' ')[0]}</span>
+                                  </div>
+                                  <span className="text-xs font-bold text-slate-400">
+                                      已学 {completedInModule} / 共 {lessonCount} 课
+                                  </span>
                               </div>
                               
-                              <div className={`mt-4 py-3 rounded-xl ${palette.light} ${palette.text} text-center text-sm font-bold group-hover:brightness-95 transition-all`}>
-                                  {progress === 100 ? '复习' : progress > 0 ? '继续' : '开始'}
+                              {/* Action Button (Start/Continue) */}
+                              <div className={`w-10 h-10 rounded-full ${palette.light} ${palette.text} flex items-center justify-center transition-all duration-300 group-hover:w-24 overflow-hidden relative`}>
+                                  <ArrowRight size={18} className="absolute transition-all duration-300 group-hover:translate-x-10 group-hover:opacity-0" />
+                                  <span className="absolute whitespace-nowrap opacity-0 -translate-x-10 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 text-xs font-extrabold uppercase tracking-wider">
+                                      Start
+                                  </span>
                               </div>
                           </div>
                       </div>
@@ -445,30 +444,31 @@ const App: React.FC = () => {
         {currentView === ViewState.MODULE_DETAIL && selectedModule && (
            <div className="max-w-5xl mx-auto px-4 w-full py-12 animate-fade-in">
               {/* Header */}
-              <div className="flex flex-col items-center mb-24 text-center relative">
+              <div className="flex flex-col items-center mb-16 text-center relative">
                  <button 
                    onClick={() => setCurrentView(ViewState.ROADMAP_HOME)}
-                   className="mb-8 px-6 py-2 rounded-full bg-white border border-gray-100 text-xs font-bold text-slate-500 hover:text-slate-800 hover:shadow-md transition-all flex items-center"
+                   className="mb-8 px-8 py-3 rounded-full bg-white border border-gray-100 text-sm font-bold text-slate-500 hover:text-slate-800 hover:shadow-md transition-all flex items-center"
                  >
-                   <ArrowRight size={14} className="rotate-180 mr-2"/> 返回章节列表
+                   <ArrowRight size={16} className="rotate-180 mr-2"/> 返回章节列表
                  </button>
                  
-                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center mb-6 shadow-sm text-slate-700">
-                    {getModuleIcon(selectedModule.iconName, 32)}
-                 </div>
-
                  <h2 className="text-4xl md:text-6xl font-black text-slate-800 mb-4 tracking-tight">
                     {selectedModule.title.split('：')[1] || selectedModule.title}
                  </h2>
-                 <p className="text-slate-500 max-w-2xl text-lg font-medium">
-                    {selectedModule.description}
-                 </p>
+                 <div className="mt-3 flex items-center justify-center gap-3 max-w-3xl mx-auto text-sm md:text-base text-slate-500">
+                    <div className="text-android/80 flex-shrink-0">
+                      {getModuleIcon(selectedModule.iconName, 24)}
+                    </div>
+                    <p className="text-left md:text-center font-medium leading-relaxed">
+                      {selectedModule.description}
+                    </p>
+                 </div>
               </div>
 
               {/* The Macaron Timeline */}
               <div className="relative pb-20">
                  
-                 <div className="space-y-16 md:space-y-24 relative">
+                 <div className="space-y-8 md:space-y-12 relative">
                    {selectedModule.sections.map((section, idx) => {
                       const isLeft = idx % 2 === 0;
                       // Random Color Assignment
@@ -480,23 +480,27 @@ const App: React.FC = () => {
                       
                       const sectionCard = (
                         <div className="w-full md:w-1/2 pl-24 md:pl-0 md:px-0">
-                              <div className={`group relative bg-white rounded-[2rem] shadow-sm hover:shadow-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 ring-1 ring-slate-100`}>
+                              <div className={`group relative ${macaron.light} border border-white/50 rounded-2xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl`}>
                                  
-                                 {/* Colored Header */}
-                                 <div className={`p-6 ${macaron.bg} flex flex-col justify-center relative overflow-hidden`}>
-                                     {/* Bubbles */}
-                                     <div className="absolute -right-4 -top-4 w-20 h-20 bg-white/20 rounded-full"></div>
-                                     <div className="absolute left-4 -bottom-8 w-16 h-16 bg-white/10 rounded-full"></div>
+                                 {/* Header Area (blended with body) */}
+                                 <div className="p-5 border-b border-black/5 relative overflow-hidden">
+                                     {/* Bubbles - White/Transparent */}
+                                     <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/40 blur-xl"></div>
+                                     <div className="absolute -left-8 bottom-0 w-16 h-16 rounded-full bg-white/30 blur-lg"></div>
 
-                                     <span className={`text-xs font-bold uppercase tracking-widest ${macaron.text} opacity-70 mb-1`}>Section 0{idx + 1}</span>
-                                     <h3 className={`text-xl font-extrabold ${macaron.text} relative z-10`}>
+                                     <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-slate-500/60 mb-1.5 block">
+                                       SECTION 0{idx + 1}
+                                     </span>
+                                     <h3 className="text-xl font-black text-slate-800 relative z-10 flex items-center gap-3">
+                                         <span className={`inline-flex h-8 w-8 items-center justify-center rounded-lg text-xs font-black ${macaron.bg} text-white shadow-sm`}>
+                                           {idx + 1}
+                                         </span>
                                          {section.title}
                                      </h3>
                                  </div>
 
-                                 {/* Lessons */}
-                                 <div className="p-4 bg-white">
-                                    <div className="space-y-1">
+                                 {/* Lessons List */}
+                                 <div className="p-4 space-y-2">
                                         {section.lessons.map((lesson, lIdx) => {
                                         const isCompleted = completedLessons.has(lesson.id);
                                         const locked = isLessonLocked(lesson.id);
@@ -505,26 +509,26 @@ const App: React.FC = () => {
                                                 key={lesson.id}
                                                 onClick={() => handleStartLesson(lesson)}
                                                 disabled={locked}
-                                                className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-200 text-left group/item ${
+                                                className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl transition-all duration-200 text-left group/item ${
                                                     locked 
-                                                        ? 'opacity-40 cursor-not-allowed grayscale' 
+                                                        ? 'opacity-40 cursor-not-allowed grayscale bg-black/5' 
                                                         : isCompleted
-                                                            ? 'bg-gray-50'
-                                                            : `hover:bg-gray-50`
+                                                            ? 'bg-white/80 border border-white shadow-sm' // Glassy completed
+                                                            : 'bg-white/40 hover:bg-white/90 border border-transparent hover:shadow-sm' // Glassy default
                                                 }`}
                                             >
                                                 <div className="flex items-center gap-4 min-w-0">
                                                     <div className="shrink-0">
                                                             {isCompleted ? (
-                                                                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                                                                    <CheckCircle2 size={16} />
+                                                                <div className="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center text-white shadow-sm">
+                                                                    <CheckCircle2 size={14} />
                                                                 </div>
                                                             ) : locked ? (
-                                                                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 border border-gray-200">
-                                                                    <Lock size={14} />
+                                                                <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-slate-400">
+                                                                    <Lock size={12} />
                                                                 </div>
                                                             ) : (
-                                                                <div className={`w-8 h-8 rounded-full ${macaron.icon} flex items-center justify-center text-white font-bold text-xs shadow-sm group-hover/item:scale-110 transition-transform`}>
+                                                                <div className={`w-6 h-6 rounded-full ${macaron.bg} flex items-center justify-center text-white font-bold text-[10px] shadow-sm group-hover/item:scale-110 transition-transform`}>
                                                                     {lIdx + 1}
                                                                 </div>
                                                             )}
@@ -539,7 +543,6 @@ const App: React.FC = () => {
                                             </button>
                                         )
                                         })}
-                                    </div>
                                  </div>
 
                               </div>
