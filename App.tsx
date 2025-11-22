@@ -27,6 +27,7 @@ const App: React.FC = () => {
   });
 
   // Interaction State
+  const [lessonContentType, setLessonContentType] = useState<'text' | 'comic'>('text');
   const [showQuiz, setShowQuiz] = useState(false);
   const [quizSelectedOption, setQuizSelectedOption] = useState<string | null>(null);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
@@ -81,15 +82,16 @@ const App: React.FC = () => {
   // --- THE COLOR SYSTEM ---
   
   // 1. Defined Palette for the 8 Main Chapters (Fixed per chapter for consistency on Home)
+  // Updated to be slightly more saturated/bolder as requested
   const MODULE_PALETTES = [
-    { id: 'pink',   bg: 'bg-[#FFC1CC]', text: 'text-[#C25E58]', border: 'border-[#FFC1CC]', light: 'bg-[#FFF0F3]' }, // Sakura
-    { id: 'blue',   bg: 'bg-[#A2E1DB]', text: 'text-[#4A7FB5]', border: 'border-[#A2E1DB]', light: 'bg-[#E6F7F6]' }, // Minty Blue
-    { id: 'yellow', bg: 'bg-[#FDFD96]', text: 'text-[#B5A048]', border: 'border-[#FDFD96]', light: 'bg-[#FFFFE0]' }, // Pastel Yellow
-    { id: 'purple', bg: 'bg-[#D4C4FB]', text: 'text-[#7A6BC2]', border: 'border-[#D4C4FB]', light: 'bg-[#F3EFFF]' }, // Lavender
-    { id: 'orange', bg: 'bg-[#FFD8B1]', text: 'text-[#CC8A66]', border: 'border-[#FFD8B1]', light: 'bg-[#FFF5EB]' }, // Peach
-    { id: 'green',  bg: 'bg-[#C7E9B0]', text: 'text-[#6CB57C]', border: 'border-[#C7E9B0]', light: 'bg-[#F1FBEB]' }, // Tea Green
-    { id: 'cyan',   bg: 'bg-[#B2F7EF]', text: 'text-[#57967D]', border: 'border-[#B2F7EF]', light: 'bg-[#E8FDFA]' }, // Cyan
-    { id: 'rose',   bg: 'bg-[#FAB0B0]', text: 'text-[#C26882]', border: 'border-[#FAB0B0]', light: 'bg-[#FDECEC]' }, // Light Red
+    { id: 'pink',   bg: 'bg-[#FF8FAB]', text: 'text-[#C9184A]', border: 'border-[#FF8FAB]', light: 'bg-[#FFF0F5]' }, // Bold Pink
+    { id: 'blue',   bg: 'bg-[#4CC9F0]', text: 'text-[#0077B6]', border: 'border-[#4CC9F0]', light: 'bg-[#E0F7FA]' }, // Bold Cyan
+    { id: 'yellow', bg: 'bg-[#FFD60A]', text: 'text-[#A47E1B]', border: 'border-[#FFD60A]', light: 'bg-[#FFFDE7]' }, // Bold Yellow
+    { id: 'purple', bg: 'bg-[#9D4EDD]', text: 'text-[#5A189A]', border: 'border-[#9D4EDD]', light: 'bg-[#F3E5F5]' }, // Bold Purple
+    { id: 'orange', bg: 'bg-[#FB8500]', text: 'text-[#A44C04]', border: 'border-[#FB8500]', light: 'bg-[#FFF3E0]' }, // Bold Orange
+    { id: 'green',  bg: 'bg-[#52B788]', text: 'text-[#1B4332]', border: 'border-[#52B788]', light: 'bg-[#E8F5E9]' }, // Bold Green
+    { id: 'cyan',   bg: 'bg-[#00B4D8]', text: 'text-[#0077B6]', border: 'border-[#00B4D8]', light: 'bg-[#E1F5FE]' }, // Deep Sky
+    { id: 'rose',   bg: 'bg-[#F94144]', text: 'text-[#8D0801]', border: 'border-[#F94144]', light: 'bg-[#FFEBEE]' }, // Deep Red
   ];
 
   // 2. Extended Random Macaron Palette for Inner Sections (Randomized)
@@ -134,6 +136,7 @@ const App: React.FC = () => {
   const handleStartLesson = (lesson: Lesson) => {
     if (isLessonLocked(lesson.id)) return;
     setSelectedLesson(lesson);
+    setLessonContentType('text'); // Reset to text view when starting new lesson
     setCurrentView(ViewState.LESSON_DETAIL);
   };
 
@@ -250,8 +253,11 @@ const App: React.FC = () => {
   // Display all modules
   const displayedModules = CURRICULUM;
 
-  // 针对特定 Lesson（例如 1.1.1）从 public 目录加载外部 Markdown
+  // 从 public 目录加载 Lesson 的 markdown 内容
+  // resolvedLessonContent: 文字版（文件名包含 @）
+  // resolvedLessonComicContent: 漫画版（文件名不包含 @）
   const [resolvedLessonContent, setResolvedLessonContent] = useState<string>('');
+  const [resolvedLessonComicContent, setResolvedLessonComicContent] = useState<string>('');
   const lessonBasePath = useMemo(() => {
     if (!selectedLesson) return undefined;
     // 如果有 contentUrl，就用它所在目录作为 basePath，方便解析 ![[xxx.png]]
@@ -268,21 +274,57 @@ const App: React.FC = () => {
   useEffect(() => {
     if (!selectedLesson) {
       setResolvedLessonContent('');
+      setResolvedLessonComicContent('');
       return;
     }
 
-    // 如果 Lesson 配置了 contentUrl，则优先从 public/ 下加载 markdown
+    // 默认回退为内联内容
+    setResolvedLessonContent(selectedLesson.content);
+    setResolvedLessonComicContent(selectedLesson.content);
+
+    // 如果 Lesson 配置了 contentUrl，则按照约定加载文字版 / 漫画版：
+    // - contentUrl 指向「无 @」的 md（漫画版）
+    // - 同目录下，文件名为「<编号>@<标题>.md」的是文字版
     if (selectedLesson.contentUrl) {
-      const url = selectedLesson.contentUrl;
-      fetch(url)
-        .then((res) => res.text())
+      const comicUrl = selectedLesson.contentUrl; // 无 @ 的 md
+
+      // 从 lesson 标题推导文字版文件名，例如：
+      // 标题：1.1.1 @Composable 注解与函数定义
+      // 得到：1.1.1@Composable 注解与函数定义.md
+      let textUrl = comicUrl;
+      const lastSlash = comicUrl.lastIndexOf('/');
+      const dir = lastSlash !== -1 ? comicUrl.substring(0, lastSlash + 1) : '';
+
+      const titleMatch = selectedLesson.title.match(/^(\d+\.?\d*\.?\d*)\s+(.+)$/);
+      if (titleMatch) {
+        const idPart = titleMatch[1];      // 例如 1.1.1
+        let restPart = titleMatch[2];      // 例如 @Composable 注解与函数定义
+        // 去掉前面的 @，避免生成 1.1.1@@xxx 这种路径
+        restPart = restPart.replace(/^@+/, '');
+        textUrl = `${dir}${idPart}@${restPart}.md`;
+      }
+
+      // 加载文字版
+      fetch(textUrl)
+        .then((res) => {
+          if (!res.ok) throw new Error('text md not found');
+          return res.text();
+        })
         .then((text) => setResolvedLessonContent(text))
         .catch(() => {
-          // 失败时退回到内联内容
           setResolvedLessonContent(selectedLesson.content);
         });
-    } else {
-      setResolvedLessonContent(selectedLesson.content);
+
+      // 加载漫画版（contentUrl 对应的 md）
+      fetch(comicUrl)
+        .then((res) => {
+          if (!res.ok) throw new Error('comic md not found');
+          return res.text();
+        })
+        .then((text) => setResolvedLessonComicContent(text))
+        .catch(() => {
+          setResolvedLessonComicContent(selectedLesson.content);
+        });
     }
   }, [selectedLesson]);
 
@@ -369,7 +411,8 @@ const App: React.FC = () => {
 
         {/* VIEW 2: ROADMAP HOME (Beautiful Grid) */}
         {currentView === ViewState.ROADMAP_HOME && (
-          <div className="max-w-7xl mx-auto px-4 w-full py-12 animate-fade-in">
+          <div className="min-h-screen w-full bg-[#FEF9E6] py-12 animate-fade-in">
+            <div className="max-w-7xl mx-auto px-4 w-full">
             
             <div className="flex flex-col items-center mb-20">
                <h2 className="text-4xl md:text-5xl font-black text-slate-800 text-center mb-4 tracking-tight">
@@ -381,7 +424,7 @@ const App: React.FC = () => {
             </div>
 
             {/* Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                {displayedModules.map((module, idx) => {
                  const palette = MODULE_PALETTES[idx % MODULE_PALETTES.length];
                  const sectionCount = module.sections.length;
@@ -392,50 +435,39 @@ const App: React.FC = () => {
                    <div 
                       key={module.id}
                       onClick={() => handleModuleSelect(module)}
-                      className={`group relative bg-white rounded-[2.5rem] overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)]`}
+                      className={`group relative bg-white rounded-[2rem] overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-xl`}
                    >
-                      {/* Top Color Blob (Corner) */}
-                      <div className={`absolute -right-10 -top-10 w-40 h-40 rounded-full ${palette.bg} opacity-20 blur-3xl group-hover:opacity-30 transition-opacity`}></div>
-                      <div className={`absolute -left-10 -bottom-10 w-32 h-32 rounded-full ${palette.bg} opacity-10 blur-3xl group-hover:opacity-20 transition-opacity`}></div>
+                      {/* Top Right Corner Accent (Pastel) */}
+                      <div className={`absolute top-0 right-0 w-32 h-32 ${palette.light} rounded-bl-[4rem] transition-all duration-500 ease-out group-hover:scale-110`}></div>
 
                       <div className="p-8 flex flex-col h-full relative z-10">
-                          {/* Icon Box */}
-                          <div className={`w-14 h-14 rounded-2xl ${palette.light} flex items-center justify-center ${palette.text} mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                              {getModuleIcon(module.iconName, 26)}
+                          {/* Top Row: Icon Box */}
+                          <div className="mb-6">
+                             <div className={`w-16 h-16 rounded-2xl ${palette.light} flex items-center justify-center ${palette.text} transition-transform duration-300`}>
+                                {getModuleIcon(module.iconName, 32)}
+                             </div>
                           </div>
 
                           {/* Title & Desc */}
-                          <h3 className="text-xl font-black text-slate-800 mb-3 leading-tight">
+                          <h3 className="text-2xl font-black text-slate-800 mb-3 leading-tight">
                             {module.title.split('：')[1] || module.title}
                           </h3>
                           <p className="text-sm text-slate-500 font-medium line-clamp-2 mb-8 flex-grow">
                             {module.description}
                           </p>
 
-                          {/* Bottom Stats & Action */}
-                          <div className="flex items-end justify-between mt-auto">
-                              <div className="flex flex-col gap-1">
-                                  <div className={`flex items-center text-xs font-bold ${palette.text}`}>
-                                      {getModuleIcon(module.iconName, 12)}
-                                      <span className="ml-1">{module.title.split(' ')[0]}</span>
-                                  </div>
-                                  <span className="text-xs font-bold text-slate-400">
-                                      已学 {completedInModule} / 共 {lessonCount} 课
-                                  </span>
-                              </div>
-                              
-                              {/* Action Button (Start/Continue) */}
-                              <div className={`w-10 h-10 rounded-full ${palette.light} ${palette.text} flex items-center justify-center transition-all duration-300 group-hover:w-24 overflow-hidden relative`}>
-                                  <ArrowRight size={18} className="absolute transition-all duration-300 group-hover:translate-x-10 group-hover:opacity-0" />
-                                  <span className="absolute whitespace-nowrap opacity-0 -translate-x-10 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 text-xs font-extrabold uppercase tracking-wider">
-                                      Start
-                                  </span>
+                          {/* Bottom: Category/Difficulty Tag */}
+                          <div className="flex items-center mt-auto">
+                              <div className={`flex items-center space-x-2 text-xs font-bold ${palette.text}`}>
+                                  {getModuleIcon('BookOpen', 14)} 
+                                  <span>{module.difficulty}</span>
                               </div>
                           </div>
                       </div>
                    </div>
                  )
                })}
+            </div>
             </div>
           </div>
         )}
@@ -480,27 +512,23 @@ const App: React.FC = () => {
                       
                       const sectionCard = (
                         <div className="w-full md:w-1/2 pl-24 md:pl-0 md:px-0">
-                              <div className={`group relative ${macaron.light} border border-white/50 rounded-2xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl`}>
+                              <div className={`group relative bg-transparent overflow-visible`}>
                                  
-                                 {/* Header Area (blended with body) */}
-                                 <div className="p-5 border-b border-black/5 relative overflow-hidden">
-                                     {/* Bubbles - White/Transparent */}
-                                     <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/40 blur-xl"></div>
-                                     <div className="absolute -left-8 bottom-0 w-16 h-16 rounded-full bg-white/30 blur-lg"></div>
-
-                                     <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-slate-500/60 mb-1.5 block">
-                                       SECTION 0{idx + 1}
-                                     </span>
-                                     <h3 className="text-xl font-black text-slate-800 relative z-10 flex items-center gap-3">
-                                         <span className={`inline-flex h-8 w-8 items-center justify-center rounded-lg text-xs font-black ${macaron.bg} text-white shadow-sm`}>
-                                           {idx + 1}
+                                 {/* Header Area - Minimal */}
+                                 <div className="pb-3 pt-5 relative overflow-hidden flex items-end gap-4">
+                                     <div className={`relative z-10`}>
+                                         <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-slate-400 block mb-1">
+                                            SECTION 0{idx + 1}
                                          </span>
-                                         {section.title}
-                                     </h3>
+                                         <h3 className="text-2xl font-black text-slate-800 relative z-10 leading-none">
+                                            {section.title}
+                                         </h3>
+                                     </div>
+                                     <div className={`flex-grow h-px bg-slate-200 mb-2`}></div>
                                  </div>
 
-                                 {/* Lessons List */}
-                                 <div className="p-4 space-y-2">
+                                 {/* Lessons List - Styled like reference (numbered tags) */}
+                                 <div className="pl-2 space-y-3 relative z-10">
                                         {section.lessons.map((lesson, lIdx) => {
                                         const isCompleted = completedLessons.has(lesson.id);
                                         const locked = isLessonLocked(lesson.id);
@@ -509,36 +537,34 @@ const App: React.FC = () => {
                                                 key={lesson.id}
                                                 onClick={() => handleStartLesson(lesson)}
                                                 disabled={locked}
-                                                className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl transition-all duration-200 text-left group/item ${
-                                                    locked 
-                                                        ? 'opacity-40 cursor-not-allowed grayscale bg-black/5' 
-                                                        : isCompleted
-                                                            ? 'bg-white/80 border border-white shadow-sm' // Glassy completed
-                                                            : 'bg-white/40 hover:bg-white/90 border border-transparent hover:shadow-sm' // Glassy default
-                                                }`}
+                                                className={`w-full flex items-center justify-between group/item transition-all duration-200 text-left`}
                                             >
-                                                <div className="flex items-center gap-4 min-w-0">
-                                                    <div className="shrink-0">
-                                                            {isCompleted ? (
-                                                                <div className="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center text-white shadow-sm">
-                                                                    <CheckCircle2 size={14} />
-                                                                </div>
-                                                            ) : locked ? (
-                                                                <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-slate-400">
-                                                                    <Lock size={12} />
-                                                                </div>
-                                                            ) : (
-                                                                <div className={`w-6 h-6 rounded-full ${macaron.bg} flex items-center justify-center text-white font-bold text-[10px] shadow-sm group-hover/item:scale-110 transition-transform`}>
-                                                                    {lIdx + 1}
-                                                                </div>
-                                                            )}
-                                                    </div>
+                                                {/* Left Tag (Number) - Increased spacing */}
+                                                <div className={`relative h-10 min-w-[3rem] flex items-center justify-center text-white font-bold text-sm shadow-sm z-20 mr-2
+                                                    ${isCompleted ? 'bg-emerald-500' : locked ? 'bg-slate-300' : macaron.bg}
+                                                    rounded-l-lg rounded-r-sm
+                                                `}>
+                                                    {isCompleted ? <CheckCircle2 size={14} /> : (lIdx + 1).toString().padStart(2, '0')}
                                                     
-                                                    <div className="flex flex-col">
-                                                        <span className={`text-sm font-bold ${isCompleted ? 'text-slate-400 line-through' : 'text-slate-700'}`}>
-                                                            {lesson.title}
-                                                        </span>
+                                                    {/* Triangle for Ribbon effect */}
+                                                    <div className={`absolute right-[-8px] top-0 h-full w-4 overflow-hidden`}>
+                                                       <div className={`h-full w-2 ${isCompleted ? 'bg-emerald-600' : locked ? 'bg-slate-400' : macaron.bg} skew-x-12 origin-top-left brightness-75`}></div>
                                                     </div>
+                                                </div>
+
+                                                {/* Main Bar - Reduced Border Radius, Increased Shadow */}
+                                                <div className={`flex-grow flex items-center h-16 pl-6 pr-6 rounded-xl shadow-md border border-l-0 transition-all z-10
+                                                    ${isCompleted 
+                                                        ? 'bg-emerald-50/50 border-emerald-100 text-emerald-900' 
+                                                        : locked 
+                                                            ? 'bg-slate-50 border-slate-100 text-slate-400' 
+                                                            : 'bg-white border-slate-100 text-slate-700 hover:shadow-lg hover:border-slate-200 hover:-translate-x-1'
+                                                    }
+                                                `}>
+                                                    <span className={`text-sm font-bold line-clamp-1`}>
+                                                        {lesson.title}
+                                                    </span>
+                                                    {locked && <Lock size={12} className="ml-auto opacity-30" />}
                                                 </div>
                                             </button>
                                         )
@@ -601,9 +627,8 @@ const App: React.FC = () => {
         {/* VIEW 4: LESSON DETAIL (Content) */}
         {currentView === ViewState.LESSON_DETAIL && selectedLesson && (
           <div className="flex flex-col lg:flex-row h-[calc(100vh-4rem)] animate-fade-in overflow-hidden">
-            {/* ... (Same as previous, styling matches new theme naturally) ... */}
-            {/* LEFT: Content Area */}
-            <div className="w-full lg:w-2/3 h-full overflow-y-auto p-6 lg:p-12 bg-white border-r border-gray-100 scroll-smooth">
+            {/* LEFT: Content Area (Expanded) */}
+            <div className="w-full lg:w-3/4 h-full overflow-y-auto p-6 lg:p-12 bg-white border-r border-gray-100 scroll-smooth">
                <div className="max-w-3xl mx-auto pb-20">
                   <div className="mb-8 border-b border-gray-100 pb-6">
                     <div className="flex items-center justify-between">
@@ -620,9 +645,41 @@ const App: React.FC = () => {
                     <h1 className="text-3xl md:text-4xl font-black text-slate-800 mb-2 mt-4 leading-tight">{selectedLesson.title}</h1>
                   </div>
 
-                  <div className="prose prose-slate prose-headings:font-black prose-p:text-slate-600 prose-p:font-medium prose-li:text-slate-600 max-w-none mb-12">
-                    <ComplexMarkdown content={resolvedLessonContent} basePath={lessonBasePath} />
+                  {/* Content Toggle (Guide / Comic) */}
+                  <div className="flex justify-center mb-8">
+                      <div className="bg-gray-100 p-1 rounded-xl inline-flex">
+                          <button
+                              onClick={() => setLessonContentType('text')}
+                              className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${
+                                  lessonContentType === 'text'
+                                      ? 'bg-white text-slate-800 shadow-sm'
+                                      : 'text-slate-500 hover:text-slate-700'
+                              }`}
+                          >
+                              文字指南
+                          </button>
+                          <button
+                              onClick={() => setLessonContentType('comic')}
+                              className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${
+                                  lessonContentType === 'comic'
+                                      ? 'bg-white text-slate-800 shadow-sm'
+                                      : 'text-slate-500 hover:text-slate-700'
+                              }`}
+                          >
+                              漫话
+                          </button>
+                      </div>
                   </div>
+
+                  {lessonContentType === 'text' ? (
+                      <div className="prose prose-slate prose-headings:font-black prose-p:text-slate-600 prose-p:font-medium prose-li:text-slate-600 max-w-none mb-12">
+                        <ComplexMarkdown content={resolvedLessonContent} basePath={lessonBasePath} />
+                      </div>
+                  ) : (
+                      <div className="prose prose-slate prose-headings:font-black prose-p:text-slate-600 prose-p:font-medium prose-li:text-slate-600 max-w-none mb-12 animate-fade-in">
+                        <ComplexMarkdown content={resolvedLessonComicContent} basePath={lessonBasePath} />
+                      </div>
+                  )}
 
                   {/* INTERACTIVE SECTIONS */}
                   <div className="space-y-8 mb-12">
@@ -791,12 +848,15 @@ const App: React.FC = () => {
                </div>
             </div>
 
-            {/* RIGHT: AI Tutor Area */}
-            <div className="w-full lg:w-1/3 h-1/3 lg:h-full bg-gray-50 border-t lg:border-t-0 lg:border-l border-gray-100 flex flex-col">
-              <ChatInterface 
-              context={resolvedLessonContent} 
-                lessonTitle={selectedLesson.title}
-              />
+           {/* RIGHT: AI Tutor Area (Clean White Background) */}
+            <div className="w-full lg:w-1/4 h-1/3 lg:h-full bg-white border-t lg:border-t-0 lg:border-l border-gray-100 flex flex-col">
+              <div className="h-full flex flex-col">
+                  <ChatInterface 
+                    context={resolvedLessonContent} 
+                    lessonTitle={selectedLesson.title}
+                    theme="light-blue-cyberpunk"
+                  />
+              </div>
             </div>
           </div>
         )}

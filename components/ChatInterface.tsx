@@ -7,14 +7,21 @@ import ComplexMarkdown from './MarkdownRenderer';
 interface ChatInterfaceProps {
   context?: string; // The text of the current lesson to help the AI understand context
   lessonTitle?: string;
+  theme?: 'default' | 'cyberpunk' | 'light-cyberpunk' | 'light-blue-cyberpunk';
 }
 
-const ChatInterface: React.FC<ChatInterfaceProps> = ({ context, lessonTitle }) => {
+const ChatInterface: React.FC<ChatInterfaceProps> = ({ context, lessonTitle, theme = 'default' }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const isCyberpunk = theme === 'cyberpunk';
+  const isLightPinkCyberpunk = theme === 'light-cyberpunk';
+  const isLightBlueCyberpunk = theme === 'light-blue-cyberpunk';
+  const isLightCyberpunk = isLightPinkCyberpunk || isLightBlueCyberpunk;
+  const isAnyCyberpunk = isCyberpunk || isLightCyberpunk;
 
   // Reset chat when lesson changes
   useEffect(() => {
@@ -29,6 +36,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ context, lessonTitle }) =
         }
       ]);
   }, [lessonTitle]);
+
+  // ... scroll and resize effects remain same ...
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -83,23 +92,102 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ context, lessonTitle }) =
     }
   };
 
+  // Styles based on theme
+  let containerClass = "flex flex-col h-full bg-white/50 dark:bg-slate-900/50 rounded-xl border border-gray-200  overflow-hidden transition-colors duration-300";
+  if (isCyberpunk) {
+    containerClass = "flex flex-col h-full bg-[#05050A]/80 overflow-hidden"; // keep for potential dark theme
+  } else if (isLightCyberpunk) {
+    // Light Cyberpunk Styles
+    if (isLightPinkCyberpunk) {
+      // Pink/Kawaii Style
+      containerClass = "flex flex-col h-full bg-white overflow-hidden relative";
+    } else if (isLightBlueCyberpunk) {
+      // Blue Tech Style
+      containerClass = "flex flex-col h-full bg-white overflow-hidden relative";
+    }
+  }
+
+  let headerClass = "bg-gray-100 dark:bg-slate-800 p-3 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between flex-shrink-0 transition-colors";
+  if (isCyberpunk) {
+    headerClass = "bg-[#00F0FF]/90 p-3 border-b border-[#2A2A35] flex items-center justify-between flex-shrink-0";
+  } else if (isLightCyberpunk) {
+    headerClass = isLightPinkCyberpunk
+      ? "bg-white p-3 border-b border-pink-100 flex items-center justify-between flex-shrink-0"
+      : "bg-white p-3 border-b border-sky-100 flex items-center justify-between flex-shrink-0";
+  }
+
+  let userBubbleClass = "bg-blue-600 text-white rounded-tr-none";
+  if (isCyberpunk) {
+    userBubbleClass = "bg-[#7000FF] text-white rounded-tr-none shadow-[0_0_10px_rgba(112,0,255,0.4)] border border-[#8B5CF6]/30";
+  } else if (isLightCyberpunk) {
+    userBubbleClass = isLightPinkCyberpunk
+      ? "bg-pink-400 text-white rounded-tr-none shadow-[2px_2px_0px_rgba(255,182,193,1)] border border-pink-300 font-bold"
+      : "bg-sky-500 text-white rounded-tr-none shadow-[2px_2px_0px_rgba(125,211,252,1)] border border-sky-300 font-bold";
+  }
+
+  let modelBubbleClass = "bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-none border border-gray-200 dark:border-slate-700";
+  if (isCyberpunk) {
+    modelBubbleClass = "bg-[#00F0FF] text-[#00F0FF] rounded-tl-none border border-[#00F0FF]/20 shadow-[0_0_10px_rgba(0,240,255,0.1)]";
+  } else if (isLightCyberpunk) {
+    modelBubbleClass = isLightPinkCyberpunk
+      ? "bg-white text-slate-700 rounded-tl-none border-2 border-pink-100 shadow-[2px_2px_0px_rgba(240,240,250,1)]"
+      : "bg-white text-slate-700 rounded-tl-none border-2 border-sky-100 shadow-[2px_2px_0px_rgba(219,234,254,1)]";
+  }
+
   return (
-    <div className="flex flex-col h-full bg-white/50 dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-slate-800 overflow-hidden transition-colors duration-300">
+    <div className={containerClass}>
       {/* Header */}
-      <div className="bg-gray-100 dark:bg-slate-800 p-3 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between flex-shrink-0 transition-colors">
+      <div className={headerClass}>
         <div className="flex items-center">
-          <div className="p-1.5 bg-android/20 rounded-lg mr-2">
-            <Cat size={16} className="text-android" />
+          <div className={`p-1.5 rounded-lg mr-2 ${
+            isCyberpunk
+              ? 'bg-[#00F0FF]/10 text-[#00F0FF]'
+              : isLightPinkCyberpunk
+                ? 'bg-pink-200 text-pink-600'
+                : isLightBlueCyberpunk
+                  ? 'bg-sky-200 text-sky-600'
+                  : 'bg-android/20 text-android'
+          }`}>
+            <Cat size={16} />
           </div>
           <div>
-            <h2 className="text-slate-800 dark:text-white text-sm font-semibold">🐱 猫猫助教</h2>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400">Context: {lessonTitle || 'General'}</p>
+            <h2 className={`text-sm font-bold ${
+              isCyberpunk
+                ? 'text-[#00F0FF] tracking-widest uppercase'
+                : isLightPinkCyberpunk
+                  ? 'text-pink-500 tracking-wide font-mono'
+                  : isLightBlueCyberpunk
+                    ? 'text-sky-600 tracking-wide font-mono'
+                    : 'text-slate-800 dark:text-white'
+            }`}>
+              {isAnyCyberpunk
+                ? (isLightPinkCyberpunk ? '猫猫助教' : isLightBlueCyberpunk ? '猫猫助教' : '猫猫助教')
+                : '🐱 猫猫助教'}
+            </h2>
+            <p className={`text-[10px] ${
+              isCyberpunk
+                ? 'text-[#7000FF] font-mono'
+                : isLightPinkCyberpunk
+                  ? 'text-pink-300 font-mono'
+                  : isLightBlueCyberpunk
+                    ? 'text-sky-400 font-mono'
+                    : 'text-slate-500 dark:text-slate-400'
+            }`}>
+              CTX: {lessonTitle || 'Global'}
+            </p>
           </div>
         </div>
+        {isLightPinkCyberpunk && (
+          <div className="flex space-x-1">
+            <div className="w-2 h-2 rounded-full bg-pink-300"></div>
+            <div className="w-2 h-2 rounded-full bg-pink-300"></div>
+            <div className="w-2 h-2 rounded-full bg-pink-300"></div>
+          </div>
+        )}
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0 scrollbar-thin scrollbar-thumb-[#2A2A35] scrollbar-track-transparent">
         {messages.map((msg) => (
           <div 
             key={msg.id} 
@@ -108,18 +196,32 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ context, lessonTitle }) =
             <div className={`flex max-w-[90%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
               
               <div className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center mt-1 border ${
-                msg.role === 'user' ? 'bg-gray-200 dark:bg-slate-700 ml-2 border-gray-300 dark:border-slate-600' : 'bg-android/20 mr-2 border-android/30'
+                isCyberpunk 
+                  ? (msg.role === 'user' ? 'bg-[#7000FF]/20 ml-2 border-[#7000FF]/50 text-[#7000FF]' : 'bg-[#00F0FF]/10 mr-2 border-[#00F0FF]/30 text-[#00F0FF]')
+                  : isLightPinkCyberpunk
+                    ? (msg.role === 'user' ? 'bg-pink-100 ml-2 border-pink-200 text-pink-500' : 'bg-white mr-2 border-pink-100 text-pink-400 shadow-sm')
+                    : isLightBlueCyberpunk
+                      ? (msg.role === 'user' ? 'bg-sky-100 ml-2 border-sky-200 text-sky-600' : 'bg-white mr-2 border-sky-100 text-sky-500 shadow-sm')
+                      : (msg.role === 'user' ? 'bg-gray-200 dark:bg-slate-700 ml-2 border-gray-300 dark:border-slate-600' : 'bg-android/20 mr-2 border-android/30 text-android')
               }`}>
-                {msg.role === 'user' ? <User size={16} className="text-slate-600 dark:text-slate-300" /> : <Cat size={18} className="text-android" />}
+                {msg.role === 'user' ? <User size={16} /> : <Cat size={18} />}
               </div>
 
               <div className={`px-3 py-2 rounded-lg text-sm overflow-hidden w-full break-words shadow-sm ${
-                msg.role === 'user' 
-                  ? 'bg-blue-600 text-white rounded-tr-none' 
-                  : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-none border border-gray-200 dark:border-slate-700'
+                msg.role === 'user' ? userBubbleClass : modelBubbleClass
               }`}>
                 {msg.role === 'model' ? (
-                  <ComplexMarkdown content={msg.text} />
+                  <div className={
+                    isCyberpunk
+                      ? "prose-invert prose-p:text-[#00F0FF] prose-strong:text-[#00F0FF] prose-code:text-[#FF003C]"
+                      : isLightPinkCyberpunk
+                        ? "prose-p:text-slate-700 prose-strong:text-pink-600 prose-code:bg-pink-50 prose-code:text-pink-600"
+                        : isLightBlueCyberpunk
+                          ? "prose-p:text-slate-700 prose-strong:text-sky-600 prose-code:bg-sky-50 prose-code:text-sky-600"
+                          : ""
+                  }>
+                     <ComplexMarkdown content={msg.text} />
+                  </div>
                 ) : (
                   <p className="whitespace-pre-wrap">{msg.text}</p>
                 )}
@@ -131,8 +233,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ context, lessonTitle }) =
         {loading && (
           <div className="flex justify-start">
              <div className="flex flex-row items-center ml-10 space-x-2">
-                <Loader2 size={14} className="text-android animate-spin" />
-                <span className="text-slate-500 dark:text-slate-400 text-xs">本喵正在思考... 🐾</span>
+                <Loader2 size={14} className={`animate-spin ${isCyberpunk ? 'text-[#FF003C]' : isLightCyberpunk ? 'text-pink-400' : 'text-android'}`} />
+                <span className={`text-xs ${isCyberpunk ? 'text-[#FF003C] font-mono blink' : isLightCyberpunk ? 'text-pink-400 font-mono' : 'text-slate-500 dark:text-slate-400'}`}>
+                  {isAnyCyberpunk ? 'PROCESSING_DATA...' : '本喵正在思考... 🐾'}
+                </span>
              </div>
           </div>
         )}
@@ -140,25 +244,53 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ context, lessonTitle }) =
       </div>
 
       {/* Input Area */}
-      <div className="p-3 bg-gray-50/80 dark:bg-slate-800/30 border-t border-gray-200 dark:border-slate-700 flex-shrink-0 transition-colors">
+      <div className={`p-3 border-t flex-shrink-0 transition-colors ${
+        isCyberpunk ? 'bg-[#00F0FF] border-[#2A2A35]' : isLightPinkCyberpunk ? 'bg-white border-pink-100' : isLightBlueCyberpunk ? 'bg-white border-sky-100' : 'bg-gray-50/80 dark:bg-slate-800/30 border-gray-200 dark:border-slate-700'
+      }`}>
         <div className="relative flex items-end">
           <textarea
             ref={textareaRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="向猫猫助教提问..."
-            className="w-full bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg pl-3 pr-10 py-2 text-sm focus:outline-none focus:border-android resize-none scrollbar-hide placeholder-slate-400 dark:placeholder-slate-500 min-h-[40px] max-h-[160px] transition-colors"
+            placeholder={isAnyCyberpunk ? "INITIATE_QUERY..." : "向猫猫助教提问..."}
+            className={`w-full rounded-lg pl-3 pr-10 py-2 text-sm focus:outline-none resize-none scrollbar-hide min-h-[40px] max-h-[160px] transition-colors ${
+              isCyberpunk 
+                ? 'bg-[#05050A] border border-[#2A2A35] text-[#00F0FF] placeholder-[#00F0FF]/30 focus:border-[#00F0FF] focus:shadow-[0_0_10px_rgba(0,240,255,0.1)] font-mono'
+                : isLightPinkCyberpunk
+                  ? 'bg-pink-50/30 border-2 border-pink-100 text-slate-700 focus:border-pink-300 focus:bg-white focus:shadow-[0_0_10px_rgba(255,192,203,0.2)] font-medium placeholder-pink-300'
+                : isLightBlueCyberpunk
+                  ? 'bg-sky-50/40 border-2 border-sky-100 text-slate-700 focus:border-sky-300 focus:bg-white focus:shadow-[0_0_10px_rgba(125,211,252,0.3)] font-medium placeholder-sky-300'
+                  : 'bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-android placeholder-slate-400 dark:placeholder-slate-500'
+            }`}
             rows={1}
           />
           <button
             onClick={handleSend}
             disabled={!input.trim() || loading}
-            className="absolute right-2 bottom-2 p-1 bg-android text-slate-900 rounded hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className={`absolute right-2 bottom-2 p-1 rounded disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${
+              isCyberpunk 
+                ? 'bg-[#00F0FF] text-[#05050A] hover:bg-[#7000FF] hover:text-white'
+                : isLightPinkCyberpunk
+                  ? 'bg-pink-400 text-white hover:bg-pink-500 shadow-sm'
+                : isLightBlueCyberpunk
+                  ? 'bg-sky-500 text-white hover:bg-sky-600 shadow-sm'
+                  : 'bg-android text-slate-900 hover:bg-white'
+            }`}
           >
             <Send size={14} />
           </button>
         </div>
+        {isAnyCyberpunk && (
+             <div className="flex justify-between mt-1 px-1">
+                 <span className={`text-[8px] font-mono ${
+                   isLightPinkCyberpunk ? 'text-pink-300' : isLightBlueCyberpunk ? 'text-sky-300' : 'text-[#2A2A35]'
+                 }`}>SYS_READY</span>
+                 <span className={`text-[8px] font-mono ${
+                   isLightPinkCyberpunk ? 'text-pink-300' : isLightBlueCyberpunk ? 'text-sky-300' : 'text-[#2A2A35]'
+                 }`}>V2.0.4</span>
+             </div>
+        )}
       </div>
     </div>
   );
