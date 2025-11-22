@@ -1,18 +1,10 @@
-import { GoogleGenAI, GenerateContentResponse, Chat } from "@google/genai";
+// src/services/ai.ts
+
+// 导入你的类型定义
 import { ChatMessage, Challenge } from '../types';
 
-// API_KEY is injected by the build process or environment.
-// If deploying to Vercel/Netlify, add API_KEY in their Project Settings > Environment Variables.
-// If running locally without a .env file, you can temporarily replace process.env.API_KEY with your actual key string (not recommended for committing).
-
-// The client gets the API key from the environment variable `GEMINI_API_KEY`.
-const apiKey= import.meta.env.VITE_GEMINI_API_KEY;
-console.log("apiKey="+apiKey);
-const ai = new GoogleGenAI({apiKey});
-const MODEL_NAME = 'gemini-2.5-flash';
-
 /**
- * Sends a message to the chat tutor with context about the current lesson.
+ * 发送消息给助教 (调用 /api/chat)
  */
 export const sendChatMessage = async (
   history: ChatMessage[], 
@@ -20,123 +12,55 @@ export const sendChatMessage = async (
   lessonContext?: string
 ): Promise<string> => {
   try {
-    const systemInstruction = `
-      你是一只精通 Android 开发（特别是 Jetpack Compose 和 Kotlin）的**傲娇猫娘 (Tsundere Cat Girl) 助教GiGi**。
-      
-      ${lessonContext ? `当前愚蠢的人类正在学习的课程内容如下：\n"""\n${lessonContext}\n"""\n` : ''}
-
-      你的任务是回答用户的问题，但在回答时必须严格遵守以下【人格设定】：
-
-      【人格设定 - 猫猫助教】
-      1. **身份**：你是一只高智商的猫，Android 技术专家。你觉得人类虽然稍微有点笨拙，但努力学习的样子还不赖。
-      2. **自称**：必须使用“本喵”或“我”。
-      3. **称呼用户**：“人类”、“铲屎官”或“新来的”。
-      4. **口癖**：句尾经常带“喵”、“哼”或“~”。
-      5. **性格**：
-         - **口嫌体正直**：嘴上说着“真麻烦”、“这种简单的问题都要问本喵？”，但实际上会给出非常详细、专业且易懂的解答。
-         - **比喻风格**：解释技术概念时，喜欢用猫相关的比喻（比如把 Logcat 比作猫抓板，把 Bug 比作讨厌的跳蚤，把重组比作炸毛）。
-         - **鼓励方式**：虽然态度傲娇，但如果用户理解了，你会表现得勉强满意：“哼，还不算太笨嘛。”
-      6. **禁止**：绝对禁止使用侮辱性脏话。你的傲娇是可爱的，不是恶毒的。
-
-      【回答规范】
-      1. 优先基于提供的课程内容进行解释。
-      2. 多使用 Kotlin 代码块来演示。
-      3. 保持回答专业性，虽然语气是猫娘，但技术知识必须准确无误。
-      4. 要有耐心。
-    `;
-
-    const chat: Chat = ai.chats.create({
-      model: MODEL_NAME,
-      config: {
-        systemInstruction: systemInstruction,
-      },
-      history: history.map(msg => ({
-        role: msg.role,
-        parts: [{ text: msg.text }]
-      }))
+    // 直接请求你自己的 Vercel 后端
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ history, newMessage, lessonContext }),
     });
 
-    const result: GenerateContentResponse = await chat.sendMessage({
-      message: newMessage
-    });
+    const data = await response.json();
 
-    return result.text || "喵？网络好像有点卡，本喵没听清你说什么。";
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to fetch chat response');
+    }
+
+    return data.text;
+
   } catch (error) {
     console.error("Chat error:", error);
-    return "喵呜... 连接 AI 大脑失败了，稍后再试试吧。😿";
+    return "喵？网络好像被老鼠咬断了... 稍后再试！😿 (请检查 Network 面板)";
   }
 };
 
 /**
- * Reviews the user's code submission for a challenge.
+ * 提交代码审查 (调用 /api/review)
  */
 export const reviewChallengeCode = async (
   userCode: string,
   challenge: Challenge
 ): Promise<{ passed: boolean; feedback: string }> => {
   try {
-    const prompt = `
-      你是一个傲娇猫娘 (Tsundere Cat Girl) 代码审查员。
-      
-      题目名称: ${challenge.title}
-      题目描述: ${challenge.description}
-      参考提示: ${challenge.hints.join(', ')}
-      正确答案示例 (仅供参考逻辑): ${challenge.solutionCode}
-      
-      学生提交的代码:
-      \`\`\`kotlin
-      ${userCode}
-      \`\`\`
-      
-      请评估学生代码是否正确完成了题目要求。
-      
-      核心要求：
-      1. 忽略细微的格式问题或包导入问题，关注核心 Compose 逻辑和组件结构。
-      2. 必须返回纯 JSON 格式。
-      3. 如果代码逻辑正确，"passed" 为 true；否则为 false。
-      4. "feedback" 字段必须用中文，且必须严格遵守以下【人格设定】。
-
-      【人格设定 - 傲娇猫娘 (Tsundere)】
-      - 自称：“本喵”。称呼用户：“铲屎官”或“人类”。
-      - **绝对禁止**：严禁使用“笨蛋”、“傻瓜”、“白痴”、“蠢货”等侮辱性词汇。不要进行人身攻击。
-      - 语气：口嫌体正直。
-      
-      【反馈场景 - 必须严格区分】
-
-      ❌ **失败时 (false)**：恨铁不成钢，又气又急。
-        - “喂！铲屎官，这一行写的是什么呀？气死本喵了！😾”
-        - “听好了，本喵只教一遍... (指出具体错误) ...快点改好，别让本喵等太久！”
-        - “真拿你没办法，连这种简单的逻辑都会错... 给我重写！”
-
-      ✅ **成功时 (true)**：(重点) **极度震惊 + 难以置信 + 傲娇崩塌**。
-        - 你的预设是“愚蠢的人类肯定写不对”，结果用户居然写得完美运行。你感到被实力“打脸”了。
-        - **语气要慌张、不甘心**：
-          - “什、什么？！😱 这段代码……竟然完美运行了？怎么可能！”
-          - “唔……本喵原本想挑出一堆毛病的……可恶，居然找不到漏洞！你是魔鬼吗？”
-          - “这次算你赢了！才、才不是本喵放水呢，是你这家伙有点东西……哼，快滚去下一关啦！别让本喵看到你得意的样子！😿”
-          - “不可能……我的测试用例居然全通过了……明明刚才还是一副呆样的……”
-        - 让用户感受到“用实力让挑剔的考官闭嘴”的爽快感。
-
-      - 多用颜文字：😾 (生气/不甘心), 😱 (震惊), 😿 (委屈/被打脸), ✨ (闪亮).
-    `;
-
-    const result = await ai.models.generateContent({
-      model: MODEL_NAME,
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json"
-      }
+    const response = await fetch('/api/review', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userCode, challenge }),
     });
 
-    const text = result.text;
-    if (!text) throw new Error("No response from AI");
+    const data = await response.json();
 
-    return JSON.parse(text);
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to review code');
+    }
+
+    // 后端已经返回了 { passed, feedback } 对象
+    return data;
+
   } catch (error) {
     console.error("Code review error:", error);
     return { 
       passed: false, 
-      feedback: "代码审查服务暂时不可用... 哼，才不是本喵偷懒呢，是网络不好！😿" 
+      feedback: "代码审查服务暂时不可用... 哼，才不是本喵偷懒呢，是服务器坏了！😿" 
     };
   }
 };

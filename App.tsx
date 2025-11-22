@@ -752,7 +752,7 @@ const App: React.FC = () => {
                       </div>
                   )}
 
-<div class="divider"><hr></hr></div>
+<div className="divider"><hr></hr></div>
 
                   {/* INTERACTIVE SECTIONS */}
                   <div className="space-y-8 mb-12">

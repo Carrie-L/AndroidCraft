@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Quest } from '../types';
 import { X, ExternalLink, Sparkles, Loader2, GitBranch, Star, Zap, Hourglass, RotateCcw, Terminal, Cpu } from 'lucide-react';
-import { verifySubmission } from '../utils/magister';
+// import { verifySubmission } from '../utils/magister';
 
 interface QuestModalProps {
   quest: Quest;
@@ -42,7 +42,8 @@ const QuestModal: React.FC<QuestModalProps> = ({ quest, status, onClose, onAccep
   const handleSubmit = async () => {
     if (!repoLink) return;
     setIsVerifying(true);
-    const result = await verifySubmission(quest.title, repoLink);
+    // const result = await verifySubmission(quest.title, repoLink);
+    const result = quest.title;
     setIsVerifying(false);
     setVerificationResult(result);
     setTimeout(() => {
