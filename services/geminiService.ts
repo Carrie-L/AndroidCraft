@@ -4,7 +4,18 @@ import { ChatMessage, Challenge } from '../types';
 // API_KEY is injected by the build process or environment.
 // If deploying to Vercel/Netlify, add API_KEY in their Project Settings > Environment Variables.
 // If running locally without a .env file, you can temporarily replace process.env.API_KEY with your actual key string (not recommended for committing).
-const ai = new GoogleGenAI({ apiKey: process.env.VITE_API_KEY });
+
+// 打印一下看看有没有拿到（调试完记得删掉）
+const apiKey = import.meta.env.VITE_API_KEY;
+console.log("Current API Key:", apiKey); 
+
+if (!apiKey) {
+    throw new Error("Key is missing!");
+}
+
+const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_API_KEY });
+
+
 
 const MODEL_NAME = 'gemini-2.5-flash';
 
