@@ -393,7 +393,7 @@ const App: React.FC = () => {
                          {getCategoryIcon(cat.iconName)}
                        </div>
 
-                       <h3 className="text-2xl font-extrabold text-slate-800 mb-3">{cat.title}</h3>
+                       <h3 className="middle-title font-extrabold text-slate-800 mb-3">{cat.title}</h3>
                        <p className="text-slate-500 text-sm leading-relaxed font-medium">{cat.description}</p>
                    </div>
                    
@@ -419,7 +419,7 @@ const App: React.FC = () => {
             <div className="max-w-7xl mx-auto px-4 w-full">
             
             <div className="flex flex-col items-center mb-16">
-               <h2 className="text-3xl md:text-4xl font-black text-slate-800 text-center mb-3 tracking-tight">
+               <h2 className="text-3xl md:text-4xl font-black text-slate-800 text-center mb-3 tracking-tight border-b border-slate-900 inline-block px-2 pb-1">
                  学习路线图
                </h2>
                <p className="text-slate-500 text-center font-medium">
@@ -488,7 +488,7 @@ const App: React.FC = () => {
                    <ArrowRight size={16} className="rotate-180 mr-2"/> 返回章节列表
                  </button>
                  
-                 <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-4 tracking-tight">
+                 <h2 className="text-2xl md:text-2xl border-b border-slate-900 inline-block pb-1 font-black text-slate-800 mb-4 tracking-tight">
                     {selectedModule.title.split('：')[1] || selectedModule.title}
                  </h2>
                  <div className="mt-3 flex items-center justify-center gap-3 max-w-3xl mx-auto text-sm md:text-base text-slate-500">
@@ -524,7 +524,7 @@ const App: React.FC = () => {
                                          <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-slate-400 block mb-1">
                                             SECTION 0{idx + 1}
                                          </span>
-                                         <h3 className="text-2xl font-black text-slate-800 relative z-10 leading-none">
+                                         <h3 className="small-title font-black text-slate-800 relative z-10 leading-none">
                                             {section.title}
                                          </h3>
                                      </div>
@@ -678,7 +678,9 @@ const App: React.FC = () => {
                         </button>
                       </div>
                     </div>
-                    <h1 className="text-3xl md:text-4xl font-black text-slate-800 mb-2 mt-4 leading-tight">{selectedLesson.title}</h1>
+                    <h1 className="text-3xl md:text-4xl font-black text-slate-800 mb-2 mt-4 leading-tight">
+                      {selectedLesson.title}
+                    </h1>
                   </div>
 
                   {/* Content Toggle (Guide / Comic) */}

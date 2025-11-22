@@ -1,3 +1,24 @@
+
+
+.small-title{
+  font-size: 16px !important;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--md-accent);
+  border-bottom: 1px solid var(--md-accent);
+  padding-bottom: 3px;
+}
+
+.middle-title{
+  font-size: 16px !important;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--md-accent);
+  border-bottom: 1px solid var(--md-accent);
+  padding-bottom: 3px;
+}
+
+
 /* =========================================
  *  杂志风 Markdown 主题（Magazine Style）
  *  从用户提供样式整理而来，作为全局 markdown.css 使用
@@ -19,14 +40,22 @@
   --md-table-stripe: #f9f9f9;
 }
 
-/* 杂志风标题：居左、稍紧凑、有下划线 */
-.app[data-mdtheme="magazine"] h1,
-.app[data-mdtheme="magazine"] h2,
-.app[data-mdtheme="magazine"] h3 {
+/* 杂志风标题：仅作用于 markdown 正文里的标题，避免干扰全站 UI */
+.app[data-mdtheme="magazine"] .markdown-body h1,
+.app[data-mdtheme="magazine"] .markdown-body h2,
+.app[data-mdtheme="magazine"] .markdown-body h3 {
   text-align: left;
   font-weight: 600;
   letter-spacing: 0.5px;
   border-bottom: 1px solid var(--md-accent);
+  padding-bottom: 2px;
+  font-size: 18px;
+}
+
+.app[data-mdtheme="magazine"] .markdown-body h4 {
+  text-align: left;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   padding-bottom: 2px;
   font-size: 16px;
 }
