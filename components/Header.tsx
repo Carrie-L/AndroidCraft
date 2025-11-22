@@ -78,14 +78,6 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate, selectedModule
 
           {/* Right Navigation */}
           <nav className="flex items-center space-x-2 flex-shrink-0">
-             <button
-              onClick={toggleTheme}
-              className="p-2 rounded-full text-slate-500 hover:bg-gray-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors mr-2"
-              aria-label="Toggle Theme"
-            >
-              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
-
             <button
               onClick={() => onNavigate(ViewState.LANDING)}
               className="hidden md:flex items-center px-3 py-2 rounded-md text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"

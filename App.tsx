@@ -414,8 +414,8 @@ const App: React.FC = () => {
           <div className="min-h-screen w-full bg-[#FEF9E6] py-12 animate-fade-in">
             <div className="max-w-7xl mx-auto px-4 w-full">
             
-            <div className="flex flex-col items-center mb-20">
-               <h2 className="text-4xl md:text-5xl font-black text-slate-800 text-center mb-4 tracking-tight">
+            <div className="flex flex-col items-center mb-16">
+               <h2 className="text-3xl md:text-4xl font-black text-slate-800 text-center mb-3 tracking-tight">
                  学习路线图
                </h2>
                <p className="text-slate-500 text-center font-medium">
@@ -569,6 +569,26 @@ const App: React.FC = () => {
                                             </button>
                                         )
                                         })}
+
+                                        {/* 魔法学院试炼 - 作为额外一条可点击的条目 */}
+                                        <button
+                                          onClick={() => alert('魔法学院试炼：敬请期待专门的试炼页面')}
+                                          className="w-full flex items-center justify-between group/item transition-all duration-200 text-left"
+                                        >
+                                          {/* Left Tag */}
+                                          <div className={`relative h-10 min-w-[3rem] flex items-center justify-center text-white font-bold text-sm shadow-sm z-20 mr-2 bg-purple-300 rounded-l-lg rounded-r-sm`}>
+                                          🌾
+                                            <div className="absolute right-[-8px] top-0 h-full w-4 overflow-hidden">
+                                              <div className="h-full w-2 bg-purple-400 skew-x-12 origin-top-left brightness-75"></div>
+                                            </div>
+                                          </div>
+                                          {/* Main Bar */}
+                                          <div className="flex-grow flex items-center h-16 pl-6 pr-6 rounded-xl shadow-md border border-l-0 bg-white border-purple-100 text-purple-500 hover:shadow-lg hover:border-purple-200 hover:-translate-x-1">
+                                            <span className="text-sm font-bold line-clamp-1">
+                                              魔法学院试炼
+                                            </span>
+                                          </div>
+                                        </button>
                                  </div>
 
                               </div>
@@ -585,7 +605,7 @@ const App: React.FC = () => {
 
                            {/* Center Number Node */}
                            <div className="absolute left-6 md:left-1/2 transform md:-translate-x-1/2 flex items-center justify-center z-10">
-                                <div className={`w-14 h-14 ${isSectionComplete ? 'bg-[#3DDC84] text-white' : `${macaron.bg} ${macaron.text}`} rounded-full flex items-center justify-center shadow-sm border-[5px] border-[#FDFDFD] transition-all duration-500 group-hover/section:scale-110`}>
+                                <div className={`w-14 h-14 ${isSectionComplete ? 'bg-[#3DDC84] text-white' : `${macaron.bg} ${macaron.text}`} rounded-full flex items-center justify-center shadow-sm border-[5px] border-[#FFFAFA] transition-all duration-500 group-hover/section:scale-110`}>
                                     {isSectionComplete ? (
                                         <Award size={28} className="animate-bounce-subtle" />
                                     ) : (
@@ -630,40 +650,52 @@ const App: React.FC = () => {
             {/* LEFT: Content Area (Expanded) */}
             <div className="w-full lg:w-3/4 h-full overflow-y-auto p-6 lg:p-12 bg-white border-r border-gray-100 scroll-smooth">
                <div className="max-w-3xl mx-auto pb-20">
-                  <div className="mb-8 border-b border-gray-100 pb-6">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center text-[#3DDC84] mb-2 text-sm font-bold bg-[#3DDC84]/10 px-3 py-1 rounded-full w-fit">
-                            <BookOpen size={14} className="mr-2" />
-                            <span>LEARNING</span>
-                        </div>
+                  <div className="mb-6 border-b border-gray-100 pb-5">
+                    <div className="flex items-center justify-between mb-2">
+                      {/* 左：LEARNING 徽章 */}
+                      <div className="flex items-center text-[#3DDC84] text-xs font-bold bg-[#3DDC84]/10 px-3 py-1 rounded-full">
+                        <BookOpen size={14} className="mr-2" />
+                        <span>LEARNING</span>
+                      </div>
+
+                      {/* 右：Completed 状态 + 返回按钮 */}
+                      <div className="flex items-center gap-3">
                         {completedLessons.has(selectedLesson.id) && (
-                            <span className="flex items-center text-green-600 text-sm font-bold">
-                                <CheckCircle2 size={16} className="mr-1"/> COMPLETED
-                            </span>
+                          <span className="flex items-center text-green-600 text-xs font-bold">
+                            <CheckCircle2 size={14} className="mr-1" /> COMPLETED
+                          </span>
                         )}
+                        <button
+                          onClick={() => setCurrentView(ViewState.MODULE_DETAIL)}
+                          className="inline-flex items-center text-xs text-slate-400 hover:text-slate-700 transition-colors"
+                        >
+                          <ArrowRight size={14} className="rotate-180 mr-1" />
+                          返回小节列表
+                        </button>
+                      </div>
                     </div>
                     <h1 className="text-3xl md:text-4xl font-black text-slate-800 mb-2 mt-4 leading-tight">{selectedLesson.title}</h1>
                   </div>
 
                   {/* Content Toggle (Guide / Comic) */}
                   <div className="flex justify-center mb-8">
-                      <div className="bg-gray-100 p-1 rounded-xl inline-flex">
+                      <div className="bg-sky-50 p-0.5 rounded-xl inline-flex">
                           <button
                               onClick={() => setLessonContentType('text')}
-                              className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${
+                              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
                                   lessonContentType === 'text'
-                                      ? 'bg-white text-slate-800 shadow-sm'
-                                      : 'text-slate-500 hover:text-slate-700'
+                                      ? 'bg-white text-black shadow-sm'
+                                      : 'text-slate-400 hover:text-slate-600'
                               }`}
                           >
                               文字指南
                           </button>
                           <button
                               onClick={() => setLessonContentType('comic')}
-                              className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${
+                              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
                                   lessonContentType === 'comic'
-                                      ? 'bg-white text-slate-800 shadow-sm'
-                                      : 'text-slate-500 hover:text-slate-700'
+                                      ? 'bg-white text-black shadow-sm'
+                                      : 'text-slate-400 hover:text-slate-600'
                               }`}
                           >
                               漫话
@@ -672,11 +704,11 @@ const App: React.FC = () => {
                   </div>
 
                   {lessonContentType === 'text' ? (
-                      <div className="prose prose-slate prose-headings:font-black prose-p:text-slate-600 prose-p:font-medium prose-li:text-slate-600 max-w-none mb-12">
+                      <div className="prose max-w-none mb-12 font-['LXGWWenKai-Light',system-ui,sans-serif] prose-slate prose-headings:font-black prose-p:text-slate-700 prose-p:leading-relaxed prose-li:text-slate-700 prose-code:text-sky-700 prose-code:bg-sky-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-md prose-pre:bg-[#0f172a] prose-pre:text-sky-100 prose-pre:rounded-2xl prose-pre:p-4 prose-pre:shadow-md">
                         <ComplexMarkdown content={resolvedLessonContent} basePath={lessonBasePath} />
                       </div>
                   ) : (
-                      <div className="prose prose-slate prose-headings:font-black prose-p:text-slate-600 prose-p:font-medium prose-li:text-slate-600 max-w-none mb-12 animate-fade-in">
+                      <div className="prose max-w-none mb-12 animate-fade-in font-['LXGWWenKai-Light',system-ui,sans-serif] prose-slate prose-headings:font-black prose-p:text-slate-700 prose-p:leading-relaxed prose-li:text-slate-700 prose-code:text-sky-700 prose-code:bg-sky-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-md prose-pre:bg-[#0f172a] prose-pre:text-sky-100 prose-pre:rounded-2xl prose-pre:p-4 prose-pre:shadow-md">
                         <ComplexMarkdown content={resolvedLessonComicContent} basePath={lessonBasePath} />
                       </div>
                   )}
@@ -686,9 +718,9 @@ const App: React.FC = () => {
                     
                     {/* QUIZ */}
                     {selectedLesson.quiz && (
-                      <div className="bg-white rounded-3xl border-2 border-indigo-50 overflow-hidden shadow-sm">
-                        <div className="bg-indigo-50/50 p-6 border-b border-indigo-50 flex items-center">
-                          <div className="bg-indigo-100 p-2 rounded-lg mr-3 text-indigo-600">
+                      <div className="bg-white rounded-3xl border-2 border-purple-50 overflow-hidden shadow-sm">
+                        <div className="bg-purple-50/70 p-6 border-b border-purple-100 flex items-center">
+                          <div className="bg-purple-100 p-2 rounded-lg mr-3 text-purple-600">
                              <HelpCircle size={24} />
                           </div>
                           <h3 className="font-extrabold text-slate-800 text-lg">Pop Quiz</h3>
@@ -709,8 +741,8 @@ const App: React.FC = () => {
                                         ? 'bg-red-50 border-red-200 text-red-700'
                                         : 'bg-gray-50 border-transparent opacity-50'
                                     : quizSelectedOption === option.id
-                                      ? 'bg-indigo-50 border-indigo-500 text-indigo-700'
-                                      : 'bg-white border-gray-100 hover:border-indigo-200 text-slate-600'
+                                      ? 'bg-purple-50 border-purple-400 text-purple-500'
+                                      : 'bg-white border-gray-100 hover:border-purple-200 text-slate-600'
                                 }`}
                               >
                                 <span>{option.text}</span>
@@ -724,7 +756,11 @@ const App: React.FC = () => {
                             <button
                               onClick={() => setQuizSubmitted(true)}
                               disabled={!quizSelectedOption}
-                              className="mt-8 px-8 py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg shadow-slate-200"
+                              className={`mt-8 px-8 py-3 rounded-xl font-bold transition-all transform active:scale-95 flex items-center shadow-lg ${
+                                !quizSelectedOption
+                                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                  : 'bg-purple-400 hover:bg-purple-500 text-white shadow-purple-200'
+                              }`}
                             >
                               Check Answer
                             </button>

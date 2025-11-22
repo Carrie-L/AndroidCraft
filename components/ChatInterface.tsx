@@ -95,16 +95,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ context, lessonTitle, the
   // Styles based on theme
   let containerClass = "flex flex-col h-full bg-white/50 dark:bg-slate-900/50 rounded-xl border border-gray-200  overflow-hidden transition-colors duration-300";
   if (isCyberpunk) {
-    containerClass = "flex flex-col h-full bg-[#05050A]/80 overflow-hidden"; // keep for potential dark theme
+    containerClass = "flex flex-col h-full bg-[#05050A]/80 overflow-hidden"; // 暗色模式暂时不用
   } else if (isLightCyberpunk) {
-    // Light Cyberpunk Styles
-    if (isLightPinkCyberpunk) {
-      // Pink/Kawaii Style
-      containerClass = "flex flex-col h-full bg-white overflow-hidden relative";
-    } else if (isLightBlueCyberpunk) {
-      // Blue Tech Style
-      containerClass = "flex flex-col h-full bg-white overflow-hidden relative";
-    }
+    // Light Cyberpunk：上、左极细边框 + 轻微阴影
+    const borderColor = isLightPinkCyberpunk ? 'border-pink-300' : 'border-sky-300';
+    containerClass = `flex flex-col h-full bg-white overflow-hidden border-t border-l ${borderColor} shadow-sm`;
   }
 
   let headerClass = "bg-gray-100 dark:bg-slate-800 p-3 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between flex-shrink-0 transition-colors";
