@@ -7,7 +7,9 @@ import { ChatMessage, Challenge } from '../types';
 
 // The client gets the API key from the environment variable `GEMINI_API_KEY`.
 const apiKey= import.meta.env.VITE_GEMINI_API_KEY?.trim();
-console.log(apiKey);
+const apiKey1= process.env.VITE_GEMINI_API_KEY?.trim();
+console.log("apiKey="+apiKey);
+console.log("apiKey1"+apiKey1);
 
 const ai = new GoogleGenAI({apiKey:apiKey});
 const MODEL_NAME = 'gemini-2.5-flash';

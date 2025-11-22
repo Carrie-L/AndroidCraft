@@ -241,10 +241,253 @@ fun UserLabel() {
         description: '核心能力：控制子元素在容器内的分布逻辑。',
         lessons: [
           // 1.3.1 目前只有 @ 文本版，先不配置 contentUrl，后续有漫画版再补
-          { id: 'lesson-1-3-1', title: '1.3.1 主轴与交叉轴概念', description: 'MainAxis vs CrossAxis', order: 6, content: 'Placeholder Content',contentUrl: '/compose/1.3.1/1.3.1.md' },
+          {
+            id: 'lesson-1-3-1',
+            title: '1.3.1 主轴与交叉轴概念',
+            description: 'MainAxis vs CrossAxis',
+            order: 6,
+            content: 'Placeholder Content',
+            contentUrl: '/compose/1.3.1/1.3.1.md',
+            quiz: {
+              id: 'quiz-1-3-1',
+              question: '在 Column（垂直布局）中，如果你想让所有的子元素水平居中显示。你应该设置哪个属性？',
+              explanation: 'Column 是竖着排的。水平方向对于 Column 来说是交叉轴。管交叉轴的是 Alignment。水平方向对应 Horizontal。所以选 horizontalAlignment。',
+              options: [
+                { id: 'a', text: 'verticalArrangement = Arrangement.Center', isCorrect: false },
+                { id: 'b', text: 'horizontalArrangement = Arrangement.Center', isCorrect: false },
+                { id: 'c', text: 'horizontalAlignment = Alignment.CenterHorizontally', isCorrect: true },
+                { id: 'd', text: 'verticalAlignment = Alignment.CenterVertically', isCorrect: false }
+              ]
+            },
+            challenge: {
+              id: 'ch-1-3-1',
+              title: '实践作业：修复“歪歪扭扭”的布局',
+              description: '修改 Column 的参数，添加 horizontalAlignment，让长短不一的文字都完美地沿着屏幕的中轴线居中。',
+              hints: ['Column 的交叉轴是水平方向', '使用 horizontalAlignment'],
+              starterCode: `
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+
+@Composable
+fun AlignmentTest() {
+    // TODO: 让文字水平居中
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text("第一行：短")
+        Text("第二行：稍微长一点")
+        Text("第三行：超级超级长长长长")
+    }
+}
+              `,
+              solutionCode: `
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+
+@Composable
+fun AlignmentTest() {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("第一行：短")
+        Text("第二行：稍微长一点")
+        Text("第三行：超级超级长长长长")
+    }
+}
+              `
+            }
+          },
           // 1.3.2 / 1.3.3 有无 @ 的 1.3.2.md / 1.3.3.md 作为漫话版
-          { id: 'lesson-1-3-2', title: '1.3.2 主轴分布模式', description: 'Arrangement Modes', order: 7, content: 'Placeholder Content', contentUrl: '/compose/1.3.2/1.3.2.md' },
-          { id: 'lesson-1-3-3', title: '1.3.3 交叉轴对齐模式', description: 'Alignment Modes', order: 8, content: 'Placeholder Content', contentUrl: '/compose/1.3.3/1.3.3.md' }
+          {
+            id: 'lesson-1-3-2',
+            title: '1.3.2 主轴分布模式',
+            description: 'Arrangement Modes',
+            order: 7,
+            content: 'Placeholder Content',
+            contentUrl: '/compose/1.3.2/1.3.2.md',
+            quiz: {
+              id: 'quiz-1-3-2',
+              question: '你想做一个 App 的底部导航栏 (BottomBar)，里面有“首页”、“发现”、“我的”三个图标。你希望这三个图标在宽度上均匀分布，且最左边的图标离左屏幕边缘有一定的距离，最右边的图标离右屏幕边缘也有距离。但中间的间距不用特别大。通常推荐用哪种 Arrangement？',
+              explanation: 'SpaceAround 会在两头留出一半的间距，视觉上更透气，是导航栏的经典做法。SpaceBetween 会紧贴边缘，太挤。',
+              options: [
+                { id: 'a', text: 'Arrangement.SpaceBetween', isCorrect: false },
+                { id: 'b', text: 'Arrangement.SpaceAround', isCorrect: true },
+                { id: 'c', text: 'Arrangement.Center', isCorrect: false }
+              ]
+            },
+            challenge: {
+              id: 'ch-1-3-2',
+              title: '实践作业：对比 SpaceBetween 和 SpaceEvenly',
+              description: '在一个 Column 中创建两个 Row，分别使用 Arrangement.SpaceBetween 和 Arrangement.SpaceEvenly 排列三个方块，观察它们的区别。',
+              hints: ['Row 需要 fillMaxWidth 才有空间分配', 'SpaceBetween 两头没空隙', 'SpaceEvenly 空隙均分'],
+              starterCode: `
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun ArrangementTest() {
+    Column(modifier = Modifier.fillMaxSize()) {
+        // TODO: 第一行使用 SpaceBetween
+        Row(
+            modifier = Modifier.fillMaxWidth().background(Color.LightGray),
+            // horizontalArrangement = ?
+        ) {
+            Box(modifier = Modifier.size(50.dp).background(Color.Blue))
+            Box(modifier = Modifier.size(50.dp).background(Color.Blue))
+            Box(modifier = Modifier.size(50.dp).background(Color.Blue))
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // TODO: 第二行使用 SpaceEvenly
+        Row(
+            modifier = Modifier.fillMaxWidth().background(Color.LightGray),
+            // horizontalArrangement = ?
+        ) {
+            Box(modifier = Modifier.size(50.dp).background(Color.Blue))
+            Box(modifier = Modifier.size(50.dp).background(Color.Blue))
+            Box(modifier = Modifier.size(50.dp).background(Color.Blue))
+        }
+    }
+}
+              `,
+              solutionCode: `
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun ArrangementTest() {
+    Column(modifier = Modifier.fillMaxSize()) {
+        Row(
+            modifier = Modifier.fillMaxWidth().background(Color.LightGray),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Box(modifier = Modifier.size(50.dp).background(Color.Blue))
+            Box(modifier = Modifier.size(50.dp).background(Color.Blue))
+            Box(modifier = Modifier.size(50.dp).background(Color.Blue))
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth().background(Color.LightGray),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Box(modifier = Modifier.size(50.dp).background(Color.Blue))
+            Box(modifier = Modifier.size(50.dp).background(Color.Blue))
+            Box(modifier = Modifier.size(50.dp).background(Color.Blue))
+        }
+    }
+}
+              `
+            }
+          },
+          {
+            id: 'lesson-1-3-3',
+            title: '1.3.3 交叉轴对齐模式',
+            description: 'Alignment Modes',
+            order: 8,
+            content: 'Placeholder Content',
+            contentUrl: '/compose/1.3.3/1.3.3.md',
+            quiz: {
+              id: 'quiz-1-3-3',
+              question: '如果 Row 设置了 verticalAlignment = Alignment.Top，但其中一个子元素 Text 设置了 Modifier.align(Alignment.Bottom)。最终这个 Text 会在哪里？',
+              explanation: '子元素的 Modifier 优先级 > 父容器的默认设置。这就是“特立独行”的规则。',
+              options: [
+                { id: 'a', text: '顶部 (Top)', isCorrect: false },
+                { id: 'b', text: '底部 (Bottom)', isCorrect: true },
+                { id: 'c', text: '居中 (Center)', isCorrect: false }
+              ]
+            },
+            challenge: {
+              id: 'ch-1-3-3',
+              title: '实践作业：制作一个“垂直居中”的列表项',
+              description: '创建一个高度为 100dp 的 Row，默认垂直居中。放置三个方块，前两个跟随默认居中，第三个使用 align(Alignment.Bottom) 靠底对齐。',
+              hints: ['使用 Modifier.align() 覆盖默认对齐'],
+              starterCode: `
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun AlignmentLab() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp)
+            .background(Color.LightGray),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // 1. 红色方块（居中）
+        Box(modifier = Modifier.size(40.dp).background(Color.Red))
+        
+        Spacer(modifier = Modifier.width(10.dp))
+
+        // 2. 绿色方块（居中）
+        Box(modifier = Modifier.size(40.dp).background(Color.Green))
+
+        Spacer(modifier = Modifier.width(10.dp))
+
+        // 3. TODO: 蓝色方块（靠底）
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(Color.Blue)
+        )
+    }
+}
+              `,
+              solutionCode: `
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun AlignmentLab() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp)
+            .background(Color.LightGray),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(modifier = Modifier.size(40.dp).background(Color.Red))
+        Spacer(modifier = Modifier.width(10.dp))
+        Box(modifier = Modifier.size(40.dp).background(Color.Green))
+        Spacer(modifier = Modifier.width(10.dp))
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(Color.Blue)
+                .align(Alignment.Bottom)
+        )
+    }
+}
+              `
+            }
+          }
         ]
       },
       {
@@ -253,8 +496,156 @@ fun UserLabel() {
         description: '核心能力：使用装饰器模式配置组件的外观与行为。',
         lessons: [
           // 1.4.1 / 1.4.2 有无 @ 的 1.4.1.md / 1.4.2.md 作为漫话版
-          { id: 'lesson-1-4-1', title: '1.4.1 尺寸约束与边距背景', description: 'Sizing Constraints', order: 9, content: 'Placeholder Content', contentUrl: '/compose/1.4.1/1.4.1.md' },
-          { id: 'lesson-1-4-2', title: '1.4.2 形状裁剪与点击', description: 'Padding & Background', order: 10, content: 'Placeholder Content', contentUrl: '/compose/1.4.2/1.4.2.md' }
+          {
+            id: 'lesson-1-4-1',
+            title: '1.4.1 尺寸约束与边距背景',
+            description: 'Sizing Constraints',
+            order: 9,
+            content: 'Placeholder Content',
+            contentUrl: '/compose/1.4.1/1.4.1.md',
+            quiz: {
+              id: 'quiz-1-4-1',
+              question: '请脑补以下代码生成的图形：\n\nBox(\n    modifier = Modifier\n        .padding(10.dp)       // A\n        .background(Color.Blue) // B\n        .padding(20.dp)       // C\n        .background(Color.Green) // D\n)',
+              explanation: '按洋葱皮顺序剥开：1. padding(10.dp)：最外层先留白 10dp（模拟 Margin）。2. background(Blue)：在剩下的区域涂蓝色。3. padding(20.dp)：在蓝色区域内，再向内缩 20dp。4. background(Green)：在剩下的核心区域涂绿色。最终效果：空白 -> 蓝环 -> 绿芯。',
+              options: [
+                { id: 'a', text: '一个蓝色的方块，里面套一个绿色的方块。最外面有 10dp 的空白。', isCorrect: true },
+                { id: 'b', text: '一个绿色的方块，里面套一个蓝色的方块。', isCorrect: false },
+                { id: 'c', text: '只有绿色方块，蓝色被盖住了。', isCorrect: false }
+              ]
+            },
+            challenge: {
+              id: 'ch-1-4-1',
+              title: '实践作业：制作“胶囊按钮”样式',
+              description: '使用 Modifier 顺序技巧，制作一个文本按钮：黑框（最外层） -> 白框（中间层） -> 红框（核心背景） -> 文字。',
+              hints: ['Modifier 的执行顺序是从外向内的', '先写外层的 padding/background'],
+              starterCode: `
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun PaddingLab() {
+    Text(
+        text = "点我",
+        color = Color.White,
+        modifier = Modifier
+            // TODO: 按照 黑 -> 白 -> 红 的顺序添加 background 和 padding
+    )
+}
+              `,
+              solutionCode: `
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun PaddingLab() {
+    Text(
+        text = "点我",
+        color = Color.White,
+        modifier = Modifier
+            .background(Color.Black)
+            .padding(2.dp)
+            .background(Color.White)
+            .padding(4.dp)
+            .background(Color.Red)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    )
+}
+              `
+            }
+          },
+          {
+            id: 'lesson-1-4-2',
+            title: '1.4.2 形状裁剪与点击',
+            description: 'Padding & Background',
+            order: 10,
+            content: 'Placeholder Content',
+            contentUrl: '/compose/1.4.2/1.4.2.md',
+            quiz: {
+              id: 'quiz-1-4-2',
+              question: '如果你给一个圆角的卡片添加点击事件，发现水波纹是矩形的（超出了圆角边界），很难看。怎么解决？',
+              explanation: '先裁剪，再监听点击。Modifier.clip().clickable()。这样 clickable 拿到的就是已经被裁剪过的区域。',
+              options: [
+                { id: 'a', text: '没办法，水波纹默认就是矩形。', isCorrect: false },
+                { id: 'b', text: '把 clip(RoundedCornerShape) 放在 clickable 的前面。', isCorrect: true },
+                { id: 'c', text: '把 clip(RoundedCornerShape) 放在 clickable 的后面。', isCorrect: false }
+              ]
+            },
+            challenge: {
+              id: 'ch-1-4-2',
+              title: '实践作业：完美的列表项',
+              description: '制作一个可点击的列表项：圆角矩形，点击时水波纹也是圆角的，且内容与边界有 Padding。',
+              hints: ['Modifier 顺序：clip -> background -> clickable -> padding'],
+              starterCode: `
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun ClickableItem() {
+    Row(
+        modifier = Modifier
+            // TODO: 调整顺序，实现圆角水波纹
+            .fillMaxWidth()
+            .padding(16.dp)
+            .background(Color.LightGray)
+            .clip(RoundedCornerShape(8.dp))
+            .clickable { println("Clicked!") }
+    ) {
+        Text("这是一个可点击的卡片")
+    }
+}
+              `,
+              solutionCode: `
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun ClickableItem() {
+    Row(
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(Color.LightGray)
+            .clickable { 
+                println("点击了条目！")
+            }
+            .padding(16.dp)
+            .fillMaxWidth()
+    ) {
+        Text("这是一个可点击的卡片")
+    }
+}
+              `
+            }
+          }
         ]
       }
     ]
