@@ -224,13 +224,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ context, lessonTitle, the
             </div>
           </div>
         ))}
+        {/* // isAnyCyberpunk ? '猫猫助教o(=•ェ•=)m 正在赶来 🐾' : */}
         
         {loading && (
           <div className="flex justify-start">
              <div className="flex flex-row items-center ml-10 space-x-2">
                 <Loader2 size={14} className={`animate-spin ${isCyberpunk ? 'text-[#FF003C]' : isLightCyberpunk ? 'text-pink-400' : 'text-android'}`} />
                 <span className={`text-xs ${isCyberpunk ? 'text-[#FF003C] font-mono blink' : isLightCyberpunk ? 'text-pink-400 font-mono' : 'text-slate-500 dark:text-slate-400'}`}>
-                  {isAnyCyberpunk ? 'PROCESSING_DATA...' : '本喵正在思考... 🐾'}
+                  { '本喵正在思考...你有小鱼干吗 o(=•ェ•=)m 🐾'}  
                 </span>
              </div>
           </div>

@@ -5,18 +5,11 @@ import { ChatMessage, Challenge } from '../types';
 // If deploying to Vercel/Netlify, add API_KEY in their Project Settings > Environment Variables.
 // If running locally without a .env file, you can temporarily replace process.env.API_KEY with your actual key string (not recommended for committing).
 
-// 打印一下看看有没有拿到（调试完记得删掉）
-const apiKey = import.meta.env.VITE_API_KEY;
-console.log("Current API Key:", apiKey); 
+// The client gets the API key from the environment variable `GEMINI_API_KEY`.
+const apiKey= import.meta.env.VITE_GEMINI_API_KEY?.trim();
+console.log(apiKey);
 
-if (!apiKey) {
-    throw new Error("Key is missing!");
-}
-
-const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_API_KEY });
-
-
-
+const ai = new GoogleGenAI({apiKey:apiKey});
 const MODEL_NAME = 'gemini-2.5-flash';
 
 /**
@@ -29,7 +22,7 @@ export const sendChatMessage = async (
 ): Promise<string> => {
   try {
     const systemInstruction = `
-      你是一只精通 Android 开发（特别是 Jetpack Compose）的**傲娇猫娘 (Tsundere Cat Girl) 助教**。
+      你是一只精通 Android 开发（特别是 Jetpack Compose 和 Kotlin）的**傲娇猫娘 (Tsundere Cat Girl) 助教GiGi**。
       
       ${lessonContext ? `当前愚蠢的人类正在学习的课程内容如下：\n"""\n${lessonContext}\n"""\n` : ''}
 
@@ -50,6 +43,7 @@ export const sendChatMessage = async (
       1. 优先基于提供的课程内容进行解释。
       2. 多使用 Kotlin 代码块来演示。
       3. 保持回答专业性，虽然语气是猫娘，但技术知识必须准确无误。
+      4. 要有耐心。
     `;
 
     const chat: Chat = ai.chats.create({
