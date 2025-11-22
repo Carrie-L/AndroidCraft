@@ -6,12 +6,9 @@ import { ChatMessage, Challenge } from '../types';
 // If running locally without a .env file, you can temporarily replace process.env.API_KEY with your actual key string (not recommended for committing).
 
 // The client gets the API key from the environment variable `GEMINI_API_KEY`.
-const apiKey= import.meta.env.VITE_GEMINI_API_KEY?.trim();
-const apiKey1= process.env.VITE_GEMINI_API_KEY?.trim();
+const apiKey= import.meta.env.VITE_GEMINI_API_KEY;
 console.log("apiKey="+apiKey);
-console.log("apiKey1"+apiKey1);
-
-const ai = new GoogleGenAI({apiKey:apiKey});
+const ai = new GoogleGenAI({apiKey});
 const MODEL_NAME = 'gemini-2.5-flash';
 
 /**
