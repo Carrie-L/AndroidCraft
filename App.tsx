@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Header from './components/Header';
 import ComplexMarkdown from './components/MarkdownRenderer';
 import ChatInterface from './components/ChatInterface';
+import HtmlMarkdown from './components/HtmlMarkdown';
 import { CURRICULUM, TOPIC_CATEGORIES } from './constants';
 import { ViewState, Lesson, Difficulty, Module } from './types';
 import { reviewChallengeCode } from './services/geminiService';
@@ -329,7 +330,10 @@ const App: React.FC = () => {
   }, [selectedLesson]);
 
   return (
-    <div className={`min-h-screen font-sans selection:bg-pink-200 selection:text-pink-900 flex flex-col transition-colors duration-300 bg-[#FDFDFD] dark:bg-[#050a10]`}>
+    <div
+      className={`app min-h-screen font-sans selection:bg-pink-200 selection:text-pink-900 flex flex-col transition-colors duration-300 bg-[#FDFDFD] dark:bg-[#050a10]`}
+      data-mdtheme="magazine"
+    >
       
       <Header 
         currentView={currentView} 
@@ -704,12 +708,12 @@ const App: React.FC = () => {
                   </div>
 
                   {lessonContentType === 'text' ? (
-                      <div className="prose max-w-none mb-12 font-['LXGWWenKai-Light',system-ui,sans-serif] prose-slate prose-headings:font-black prose-p:text-slate-700 prose-p:leading-relaxed prose-li:text-slate-700 prose-code:text-sky-700 prose-code:bg-sky-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-md prose-pre:bg-[#0f172a] prose-pre:text-sky-100 prose-pre:rounded-2xl prose-pre:p-4 prose-pre:shadow-md">
-                        <ComplexMarkdown content={resolvedLessonContent} basePath={lessonBasePath} />
+                      <div className="markdown-body prose max-w-none mb-12 font-['LXGWWenKai-Light',system-ui,sans-serif] prose-slate prose-headings:font-black prose-p:text-slate-700 prose-p:leading-relaxed prose-li:text-slate-700 prose-code:text-sky-700 prose-code:bg-sky-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-md prose-pre:bg-[#0f172a] prose-pre:text-sky-100 prose-pre:rounded-2xl prose-pre:p-4 prose-pre:shadow-md">
+                        <HtmlMarkdown content={resolvedLessonContent} basePath={lessonBasePath} />
                       </div>
                   ) : (
-                      <div className="prose max-w-none mb-12 animate-fade-in font-['LXGWWenKai-Light',system-ui,sans-serif] prose-slate prose-headings:font-black prose-p:text-slate-700 prose-p:leading-relaxed prose-li:text-slate-700 prose-code:text-sky-700 prose-code:bg-sky-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-md prose-pre:bg-[#0f172a] prose-pre:text-sky-100 prose-pre:rounded-2xl prose-pre:p-4 prose-pre:shadow-md">
-                        <ComplexMarkdown content={resolvedLessonComicContent} basePath={lessonBasePath} />
+                      <div className="markdown-body prose max-w-none mb-12 animate-fade-in font-['LXGWWenKai-Light',system-ui,sans-serif] prose-slate prose-headings:font-black prose-p:text-slate-700 prose-p:leading-relaxed prose-li:text-slate-700 prose-code:text-sky-700 prose-code:bg-sky-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-md prose-pre:bg-[#0f172a] prose-pre:text-sky-100 prose-pre:rounded-2xl prose-pre:p-4 prose-pre:shadow-md">
+                        <HtmlMarkdown content={resolvedLessonComicContent} basePath={lessonBasePath} />
                       </div>
                   )}
 
