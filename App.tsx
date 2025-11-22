@@ -87,11 +87,11 @@ const App: React.FC = () => {
   const MODULE_PALETTES = [
     { id: 'pink',   bg: 'bg-[#FF8FAB]', text: 'text-[#C9184A]', border: 'border-[#FF8FAB]', light: 'bg-[#FFF0F5]' }, // Bold Pink
     { id: 'blue',   bg: 'bg-[#4CC9F0]', text: 'text-[#0077B6]', border: 'border-[#4CC9F0]', light: 'bg-[#E0F7FA]' }, // Bold Cyan
-    { id: 'yellow', bg: 'bg-[#FFD60A]', text: 'text-[#A47E1B]', border: 'border-[#FFD60A]', light: 'bg-[#FFFDE7]' }, // Bold Yellow
+    { id: 'yellow', bg: 'bg-[#FFD60A]', text: 'text-[#A47E1B]', border: 'border-[#FFD60A]', light: 'bg-[#fdf2c7]' }, // Bold Yellow
     { id: 'purple', bg: 'bg-[#9D4EDD]', text: 'text-[#5A189A]', border: 'border-[#9D4EDD]', light: 'bg-[#F3E5F5]' }, // Bold Purple
-    { id: 'orange', bg: 'bg-[#FB8500]', text: 'text-[#A44C04]', border: 'border-[#FB8500]', light: 'bg-[#FFF3E0]' }, // Bold Orange
-    { id: 'green',  bg: 'bg-[#52B788]', text: 'text-[#1B4332]', border: 'border-[#52B788]', light: 'bg-[#E8F5E9]' }, // Bold Green
-    { id: 'cyan',   bg: 'bg-[#00B4D8]', text: 'text-[#0077B6]', border: 'border-[#00B4D8]', light: 'bg-[#E1F5FE]' }, // Deep Sky
+    { id: 'orange', bg: 'bg-[#FB8500]', text: 'text-[#A44C04]', border: 'border-[#FB8500]', light: 'bg-[#ffedd5]' }, // Bold Orange
+    { id: 'green',  bg: 'bg-[#52B788]', text: 'text-[#1B4332]', border: 'border-[#52B788]', light: 'bg-[#dcfce7]' }, // Bold Green
+    { id: 'cyan',   bg: 'bg-[#00B4D8]', text: 'text-[#0077B6]', border: 'border-[#00B4D8]', light: 'bg-[#cffafe]' }, // Deep Sky
     { id: 'rose',   bg: 'bg-[#F94144]', text: 'text-[#8D0801]', border: 'border-[#F94144]', light: 'bg-[#FFEBEE]' }, // Deep Red
   ];
 
@@ -425,7 +425,7 @@ const App: React.FC = () => {
 
         {/* VIEW 2: ROADMAP HOME (Beautiful Grid) */}
         {currentView === ViewState.ROADMAP_HOME && (
-          <div className="min-h-screen w-full bg-[#FEF9E6] py-12 animate-fade-in">
+          <div className="min-h-screen w-full bg-[#fef9e6]/50 py-12 animate-fade-in">
             <div className="max-w-7xl mx-auto px-4 w-full">
             
             <div className="flex flex-col items-center mb-16">
@@ -449,10 +449,10 @@ const App: React.FC = () => {
                    <div 
                       key={module.id}
                       onClick={() => handleModuleSelect(module)}
-                      className={`group relative bg-white rounded-[2rem] overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-xl`}
+                      className={`group relative bg-white rounded-[2rem] overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-xl border-g border-slate-800 inline-block`}
                    >
                       {/* Top Right Corner Accent (Pastel) */}
-                      <div className={`absolute top-0 right-0 w-32 h-32 ${palette.light} rounded-bl-[4rem] transition-all duration-500 ease-out group-hover:scale-110`}></div>
+                      <div className={`absolute top-0 right-0 w-32 h-32 ${palette.light} rounded-bl-[4rem] transition-all duration-500 ease-out group-hover:scale-110 `}></div>
 
                       <div className="p-8 flex flex-col h-full relative z-10">
                           {/* Top Row: Icon Box */}
@@ -693,19 +693,9 @@ const App: React.FC = () => {
                     </h1>
                   </div>
 
-                  {/* Content Toggle (Guide / Comic) */}
+                  {/* Content Toggle (Comic / Guide) */}
                   <div className="flex justify-center mb-8">
                       <div className="bg-sky-50 p-0.5 rounded-xl inline-flex">
-                          <button
-                              onClick={() => setLessonContentType('text')}
-                              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                                  lessonContentType === 'text'
-                                      ? 'bg-white text-black shadow-sm'
-                                      : 'text-slate-400 hover:text-slate-600'
-                              }`}
-                          >
-                              文字指南
-                          </button>
                           <button
                               onClick={() => setLessonContentType('comic')}
                               className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
@@ -715,6 +705,16 @@ const App: React.FC = () => {
                               }`}
                           >
                               漫话
+                          </button>
+                          <button
+                              onClick={() => setLessonContentType('text')}
+                              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                                  lessonContentType === 'text'
+                                      ? 'bg-white text-black shadow-sm'
+                                      : 'text-slate-400 hover:text-slate-600'
+                              }`}
+                          >
+                              文字指南
                           </button>
                       </div>
                   </div>

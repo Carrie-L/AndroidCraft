@@ -1,0 +1,83 @@
+[
+  {
+    "id": "quest_001_birthday",
+    "rank": "F",
+    "title": "初学者的羊皮纸",
+    "subTitle": "制作贺卡应用 (Birthday Card)",
+    "description": "这是公会给所有见习学徒的第一项测试。你需要使用魔法墨水（Text）和简单的幻象（Image），绘制一张静态的祝福卷轴。这是掌握 UI 魔法的基础。",
+    "requirements": [
+      "使用 Column 和 Row 进行布局",
+      "显示一张图片和一段祝福文字",
+      "调整字体大小和颜色"
+    ],
+    "xp": 50,
+    "tags": ["UI Basics", "Layout"],
+    "codelabUrl": "https://developer.android.com/codelabs/jetpack-compose-layouts",
+    "isCompleted": false
+  },
+  {
+    "id": "quest_002_dice",
+    "rank": "E",
+    "title": "命运编织者",
+    "subTitle": "交互式掷骰子 (Dice Roller)",
+    "description": "酒馆里的吟游诗人需要一个能决定命运的小道具。你需要编写一个咒语，让屏幕上的骰子根据点击改变点数。记住，'状态 (State)' 是让死物动起来的关键灵魂。",
+    "requirements": [
+      "使用 Button 组件",
+      "理解 remember 和 mutableStateOf",
+      "随机数生成逻辑"
+    ],
+    "xp": 120,
+    "tags": ["State", "Interaction", "Resources"],
+    "codelabUrl": "https://developer.android.com/codelabs/basic-android-kotlin-compose-dice-roller",
+    "isCompleted": false
+  },
+  {
+    "id": "quest_003_mars",
+    "rank": "B",
+    "title": "虚空之眼",
+    "subTitle": "火星照片加载 (Mars Photos)",
+    "description": "公会的大法师想要窥探遥远星空的景象。你需要构建一个能穿越虚空（Network）的法阵，从遥远的服务器获取数据，并将其具象化为图像列表。小心处理连接失败的情况！",
+    "requirements": [
+      "使用 Retrofit 进行网络请求",
+      "使用 Coil 加载异步图片",
+      "解析 JSON 数据 (Serialization)"
+    ],
+    "xp": 500,
+    "tags": ["Networking", "Retrofit", "Coil", "Coroutines"],
+    "codelabUrl": "https://developer.android.com/codelabs/basic-android-kotlin-compose-mars-photos-app",
+    "isCompleted": false
+  },
+  {
+    "id": "quest_004_inventory",
+    "rank": "A",
+    "title": "无尽行囊",
+    "subTitle": "库存管理系统 (Inventory App)",
+    "description": "冒险者们带回来的战利品太多了！我们需要一个基于 Room 魔法阵的永久储存空间。你必须确保即使关闭了魔法书（App），放入行囊的物品也不会消失。",
+    "requirements": [
+      "使用 Room Database 本地存储",
+      "实现完整的 CRUD (增删改查)",
+      "使用 Repository 模式"
+    ],
+    "xp": 800,
+    "tags": ["Room", "Database", "Architecture", "Flow"],
+    "codelabUrl": "https://developer.android.com/codelabs/basic-android-kotlin-compose-persisting-data-room",
+    "isCompleted": false
+  },
+  {
+    "id": "quest_100_nia",
+    "rank": "SSS",
+    "title": "架构师的真理法典",
+    "subTitle": "Now in Android (完全体项目)",
+    "description": "【传说级委托】这是一本只有大魔导师才能看懂的禁书。它包含了 Android 开发的所有终极奥义：模块化、依赖注入、设计系统以及极致的性能优化。只有当你完全理解它，你才能被称为真正的“Android 领主”。",
+    "requirements": [
+      "深入理解 Clean Architecture",
+      "掌握 Hilt 依赖注入",
+      "多模块工程 (Modularization)",
+      "遵循 Material 3 设计规范"
+    ],
+    "xp": 5000,
+    "tags": ["Legendary", "Architecture", "Modularization", "Hilt", "Full Stack"],
+    "codelabUrl": "https://github.com/android/nowinandroid",
+    "isCompleted": false
+  }
+]
