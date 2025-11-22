@@ -39,6 +39,21 @@
       }
     </script>
     <style>
+      /* 全局缩放：通过调整 html 的基础字体大小来整体缩小 UI */
+      html {
+        font-size: 14px; /* 默认略小于浏览器 16px */
+      }
+      @media (min-width: 1024px) {
+        html {
+          font-size: 15px;
+        }
+      }
+      @media (min-width: 1440px) {
+        html {
+          font-size: 16px;
+        }
+      }
+
       body {
         @apply bg-gray-100 dark:bg-[#050a10] text-slate-800 dark:text-e2e8f0 transition-colors duration-300;
       }

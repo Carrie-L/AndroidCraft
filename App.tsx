@@ -484,7 +484,7 @@ const App: React.FC = () => {
                    <ArrowRight size={16} className="rotate-180 mr-2"/> 返回章节列表
                  </button>
                  
-                 <h2 className="text-4xl md:text-6xl font-black text-slate-800 mb-4 tracking-tight">
+                 <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-4 tracking-tight">
                     {selectedModule.title.split('：')[1] || selectedModule.title}
                  </h2>
                  <div className="mt-3 flex items-center justify-center gap-3 max-w-3xl mx-auto text-sm md:text-base text-slate-500">
@@ -511,11 +511,11 @@ const App: React.FC = () => {
                       const isSectionComplete = section.lessons.every(l => completedLessons.has(l.id));
                       
                       const sectionCard = (
-                        <div className="w-full md:w-1/2 pl-24 md:pl-0 md:px-0">
+                        <div className={`w-full md:w-[46%] pl-24 md:pl-0 md:px-0 ${isLeft ? 'md:pr-10' : 'md:pl-14'}`}>
                               <div className={`group relative bg-transparent overflow-visible`}>
                                  
                                  {/* Header Area - Minimal */}
-                                 <div className="pb-3 pt-5 relative overflow-hidden flex items-end gap-4">
+                                 <div className="pb-4 pt-5 relative overflow-hidden flex items-end gap-4">
                                      <div className={`relative z-10`}>
                                          <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-slate-400 block mb-1">
                                             SECTION 0{idx + 1}
@@ -528,7 +528,7 @@ const App: React.FC = () => {
                                  </div>
 
                                  {/* Lessons List - Styled like reference (numbered tags) */}
-                                 <div className="pl-2 space-y-3 relative z-10">
+                                 <div className="pl-2 mt-2 space-y-3 relative z-10">
                                         {section.lessons.map((lesson, lIdx) => {
                                         const isCompleted = completedLessons.has(lesson.id);
                                         const locked = isLessonLocked(lesson.id);
@@ -585,7 +585,7 @@ const App: React.FC = () => {
 
                            {/* Center Number Node */}
                            <div className="absolute left-6 md:left-1/2 transform md:-translate-x-1/2 flex items-center justify-center z-10">
-                                <div className={`w-16 h-16 ${isSectionComplete ? 'bg-[#3DDC84] text-white' : `${macaron.bg} ${macaron.text}`} rounded-full flex items-center justify-center shadow-sm border-[6px] border-[#FDFDFD] transition-all duration-500 group-hover/section:scale-110`}>
+                                <div className={`w-14 h-14 ${isSectionComplete ? 'bg-[#3DDC84] text-white' : `${macaron.bg} ${macaron.text}`} rounded-full flex items-center justify-center shadow-sm border-[5px] border-[#FDFDFD] transition-all duration-500 group-hover/section:scale-110`}>
                                     {isSectionComplete ? (
                                         <Award size={28} className="animate-bounce-subtle" />
                                     ) : (
