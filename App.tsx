@@ -372,7 +372,7 @@ const App: React.FC = () => {
                   key={cat.id}
                   onClick={() => {
                     if (cat.isComingSoon) {
-                        alert("该模块正在开发中，敬请期待！");
+                        // alert("该模块正在开发中，敬请期待！");
                     } else {
                         handleCategorySelect(cat.id);
                     }
@@ -381,7 +381,7 @@ const App: React.FC = () => {
                     border-2 border-gray-50
                     hover:border-transparent hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)]
                     hover:-translate-y-2
-                    ${cat.isComingSoon ? 'opacity-60 grayscale' : ''}
+                    ${cat.isComingSoon ? 'opacity-80 grayscale' : ''}
                   `}
                 >
                    <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl -mr-10 -mt-10 opacity-40 transition-opacity ${
@@ -389,7 +389,17 @@ const App: React.FC = () => {
                    }`}></div>
 
                    <div>
-                       <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-slate-700 bg-gray-50 mb-8 group-hover:scale-110 transition-transform duration-300`}>
+                       <div
+                         className={`
+                           w-16 h-16 rounded-2xl flex items-center justify-center mb-8
+                           group-hover:scale-110 transition-transform duration-300
+                           ${
+                             cat.id === 'compose'
+                               ? 'bg-[#dcfce7]/80 text-[#16a34a]'
+                               : 'bg-gray-50 text-slate-700'
+                           }
+                         `}
+                       >
                          {getCategoryIcon(cat.iconName)}
                        </div>
 
@@ -678,7 +688,7 @@ const App: React.FC = () => {
                         </button>
                       </div>
                     </div>
-                    <h1 className="text-3xl md:text-4xl font-black text-slate-800 mb-2 mt-4 leading-tight">
+                    <h1 className="text-2xl md:text-3xl font-black text-slate-800 mb-2 mt-4 leading-tight">
                       {selectedLesson.title}
                     </h1>
                   </div>
@@ -719,6 +729,8 @@ const App: React.FC = () => {
                       </div>
                   )}
 
+<div class="divider"><hr></hr></div>
+
                   {/* INTERACTIVE SECTIONS */}
                   <div className="space-y-8 mb-12">
                     
@@ -729,6 +741,7 @@ const App: React.FC = () => {
                           <div className="bg-purple-100 p-2 rounded-lg mr-3 text-purple-600">
                              <HelpCircle size={24} />
                           </div>
+              
                           <h3 className="font-extrabold text-slate-800 text-lg">Pop Quiz</h3>
                         </div>
                         <div className="p-8">

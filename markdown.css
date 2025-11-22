@@ -18,6 +18,11 @@
   padding-bottom: 3px;
 }
 
+.divider{
+margin-bottom: 36px;
+color: #ff79c6;
+}
+
 
 /* =========================================
  *  杂志风 Markdown 主题（Magazine Style）
@@ -38,6 +43,7 @@
   --md-quote-bg: #fafafa;
   --md-quote-bar: #000000;
   --md-table-stripe: #f9f9f9;
+  --md-inline-code: #ff79c6;
 }
 
 /* 杂志风标题：仅作用于 markdown 正文里的标题，避免干扰全站 UI */
@@ -86,17 +92,11 @@
   margin-top: 8px;
 }
 
-/* 编辑 / 预览区域背景（如果将来需要，可复用这些类名） */
-.app .preview,
-.app .editor {
-  background: var(--md-bg) !important;
-  color: var(--md-text);
-}
-
-/* 微信预览区（保留原语义） */
-.app .wechat-export {
-  background: var(--md-bg) !important;
-  color: var(--md-fg);
+.markdown-body img {
+  max-width: 95% !important;
+  height: auto !important;
+  display: block;
+  margin-bottom: 2px;
 }
 
 /* 标题层级样式 */
@@ -233,12 +233,12 @@
 /* 行内代码 */
 .markdown-body :not(pre) > code {
   background: var(--md-code-bg);
-  color: var(--md-code-fg);
+  color: var(--md-inline-code);
   border: 1px solid var(--md-border);
   padding: 0.02em 0.4em;
   border-radius: 4px;
   font-family: "LXGW WenKai", Menlo, Consolas, "Courier New", monospace;
-  font-size: 13px;
+  font-size: 12px;
   margin: 0 0.1em;
   font-weight: 500;
 }
