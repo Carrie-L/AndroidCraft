@@ -226,7 +226,7 @@ export default function App() {
                     <div className="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center text-pink-600 mb-4 shadow-sm group-hover:rotate-12 transition-transform">
                         <SplitSquareHorizontal size={24} />
                     </div>
-                    <h3 className="text-lg font-bold text-gray-800 mb-1 group-hover:text-pink-700 transition-colors">1.3.2 空间魔法</h3>
+                    <h3 className="text-lg font-bold text-gray-800 mb-1 group-hover:text-pink-700 transition-colors">1.3.1 空间魔法</h3>
                     <p className="text-gray-500 text-xs leading-relaxed mb-4">
                         Arrangement 实验室，切分剩余空间！
                     </p>
@@ -307,7 +307,7 @@ export default function App() {
                     <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 mb-4 shadow-sm group-hover:rotate-12 transition-transform">
                         <LayoutTemplate size={24} />
                     </div>
-                    <h3 className="text-lg font-bold text-gray-800 mb-1 group-hover:text-amber-700 transition-colors">布局魔法书</h3>
+                    <h3 className="text-lg font-bold text-gray-800 mb-1 group-hover:text-amber-700 transition-colors">1.3.3 布局魔法书</h3>
                     <p className="text-gray-500 text-xs leading-relaxed mb-4">
                         实战演练，挑战复杂布局。Row, Column, Arrangement, Alignment 的终极考核！
                     </p>

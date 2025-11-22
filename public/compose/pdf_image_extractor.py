@@ -73,6 +73,9 @@ def process_pdf(pdf_path):
     Processes a single PDF file: creates folder, moves file, extracts images, creates markdown.
     """
     try:
+        # 0. Record original directory of the PDF
+        original_dir = os.path.dirname(os.path.abspath(pdf_path)) or "."
+
         # 1. Create folder based on PDF name prefix
         pdf_basename = os.path.basename(pdf_path)
         match = re.match(r"^([\d\.]+)", pdf_basename)
@@ -81,23 +84,33 @@ def process_pdf(pdf_path):
             return
 
         folder_name = match.group(1)
-        if not os.path.exists(folder_name):
-            os.makedirs(folder_name)
+        folder_path = os.path.join(original_dir, folder_name)
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
         
         # 2. Move the PDF into the new folder
-        new_pdf_path = os.path.join(folder_name, pdf_basename)
+        new_pdf_path = os.path.join(folder_path, pdf_basename)
         shutil.move(pdf_path, new_pdf_path)
-        print(f"Moved '{pdf_basename}' to '{folder_name}/'")
+        print(f"Moved '{pdf_basename}' to '{folder_path}/'")
 
         # 3. Extract and compress images
-        image_filenames = extract_and_compress_images(new_pdf_path, folder_name)
+        image_filenames = extract_and_compress_images(new_pdf_path, folder_path)
 
         if not image_filenames:
             print(f"No images found in '{pdf_basename}'.")
             return
 
         # 4. Create markdown file
-        create_markdown_file(folder_name, image_filenames)
+        create_markdown_file(folder_path, image_filenames)
+
+        # 5. Move the processed PDF out of the folder, back to its original directory
+        final_pdf_path = os.path.join(original_dir, pdf_basename)
+        if os.path.abspath(new_pdf_path) != os.path.abspath(final_pdf_path):
+            if os.path.exists(final_pdf_path):
+                print(f"PDF with same name already exists at destination '{final_pdf_path}'. Skipping moving the PDF out of the folder.")
+            else:
+                shutil.move(new_pdf_path, final_pdf_path)
+                print(f"Moved '{pdf_basename}' out of '{folder_path}/' back to '{final_pdf_path}'.")
 
         print(f"Successfully processed '{pdf_basename}'.")
 

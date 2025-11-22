@@ -2,7 +2,9 @@ export enum ViewState {
   LANDING = 'LANDING',
   ROADMAP_HOME = 'ROADMAP_HOME',   // The grid list of 8 Chapters
   MODULE_DETAIL = 'MODULE_DETAIL', // The timeline view of Sections within a Chapter
-  LESSON_DETAIL = 'LESSON_DETAIL'  // The content view
+  LESSON_DETAIL = 'LESSON_DETAIL', // The content view
+  MAGIC_ACADEMY = 'MAGIC_ACADEMY',  // 起司猫的 UI 魔法学院
+  GUILD_HALL = 'GUILD_HALL'  // 星辰委托公会
 }
 
 export enum Difficulty {

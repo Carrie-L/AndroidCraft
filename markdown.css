@@ -1,4 +1,14 @@
-
+.large-title{
+  font-family: 'ScienceGothic_Expanded-ExtraBold.ttf';
+  font-weight: 800;
+  font-style: normal;
+  font-size: 48px;
+  line-height: 2;
+  letter-spacing: 0.08em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-bottom: 24px;
+}
 
 .small-title{
   font-size: 16px !important;

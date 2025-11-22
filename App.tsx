@@ -2,17 +2,20 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Header from './components/Header';
 import ComplexMarkdown from './components/MarkdownRenderer';
 import ChatInterface from './components/ChatInterface';
+import MagicAcademyApp from './components/magic-academy/App';
+import type { GameId as MagicGameId } from './components/magic-academy/types';
 import HtmlMarkdown from './components/HtmlMarkdown';
 import { CURRICULUM, TOPIC_CATEGORIES } from './constants';
 import { ViewState, Lesson, Difficulty, Module } from './types';
 import { reviewChallengeCode } from './services/geminiService';
-import { ArrowRight, CheckCircle2, PlayCircle, BookOpen, HelpCircle, Code2, Code, X, Lock, Layout, Smartphone, Layers, Loader2, RefreshCw, Box, Zap, List, Activity, Compass, Cpu, Globe, Palette, Play, Flag, Map, Star, Trophy, Target, Award } from 'lucide-react';
+import { ArrowRight, CheckCircle2, PlayCircle, BookOpen, HelpCircle, Code2, Code, X, Lock, Layout, Smartphone, Layers, Loader2, RefreshCw, Box, Zap, List, Activity, Compass, Cpu, Globe, Palette, Play, Flag, Map, Star, Trophy, Target, Award, Sparkles } from 'lucide-react';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>(ViewState.LANDING);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [selectedModule, setSelectedModule] = useState<Module | null>(null);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [magicInitialGame, setMagicInitialGame] = useState<MagicGameId>('HOME');
   
   // Theme State - Forcing Light Mode for the Macaron Aesthetic
   const [theme, setTheme] = useState<'dark' | 'light'>('light');
@@ -28,7 +31,7 @@ const App: React.FC = () => {
   });
 
   // Interaction State
-  const [lessonContentType, setLessonContentType] = useState<'text' | 'comic'>('text');
+  const [lessonContentType, setLessonContentType] = useState<'text' | 'comic'>('comic');
   const [showQuiz, setShowQuiz] = useState(false);
   const [quizSelectedOption, setQuizSelectedOption] = useState<string | null>(null);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
@@ -137,7 +140,8 @@ const App: React.FC = () => {
   const handleStartLesson = (lesson: Lesson) => {
     if (isLessonLocked(lesson.id)) return;
     setSelectedLesson(lesson);
-    setLessonContentType('text'); // Reset to text view when starting new lesson
+    // 默认进入「漫话」视图
+    setLessonContentType('comic');
     setCurrentView(ViewState.LESSON_DETAIL);
   };
 
@@ -357,10 +361,10 @@ const App: React.FC = () => {
                   <Star size={16} className="text-yellow-400 fill-yellow-400" /> 
                   <span>打造你的 Android 技能树</span>
                </div>
-               <h1 className="text-6xl md:text-8xl font-black text-slate-800 mb-6 tracking-tight">
-                Android<span className="text-[#3DDC84]">Craft</span>
+               <h1 className="text-6xl md:text-8xl font-black text-slate-800 mb-6  large-title">
+                Android<span className="text-[#3DDC84] large-title text-6xl md:text-8xl ">Craft</span>
               </h1>
-              <p className="text-xl text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed">
+              <p className="text-xl text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed large-title">
                 像玩游戏一样学习 Jetpack Compose。 <br/>
                 解锁关卡，挑战代码，获得成就。
               </p>
@@ -584,9 +588,12 @@ const App: React.FC = () => {
                                         )
                                         })}
 
-                                        {/* 魔法学院试炼 - 作为额外一条可点击的条目 */}
+                                        {/* 魔法学院试炼 - 作为额外一条可点击的条目，进入魔法学院主页 */}
                                         <button
-                                          onClick={() => alert('魔法学院试炼：敬请期待专门的试炼页面')}
+                                          onClick={() => {
+                                            setMagicInitialGame('HOME');
+                                            setCurrentView(ViewState.MAGIC_ACADEMY);
+                                          }}
                                           className="w-full flex items-center justify-between group/item transition-all duration-200 text-left"
                                         >
                                           {/* Left Tag */}
@@ -631,18 +638,18 @@ const App: React.FC = () => {
                            {/* Horizontal Connector */}
                            <div className={`hidden md:block absolute top-1/2 -translate-y-1/2 h-[2px] w-20 ${macaron.bg} ${isLeft ? 'right-1/2 mr-8' : 'left-1/2 ml-8'} rounded-full`}></div>
 
-                           {/* Section Card：在桌面端左右交替分布 */}
-                           {isLeft ? (
-                             <>
-                               {sectionCard}
-                               <div className="hidden md:block w-1/2"></div>
-                             </>
-                           ) : (
-                             <>
-                               <div className="hidden md:block w-1/2"></div>
-                               {sectionCard}
-                             </>
-                           )}
+                          {/* Section Card：在桌面端左右交替分布 */}
+                          {isLeft ? (
+                            <>
+                              {sectionCard}
+                              <div className="hidden md:block w-1/2"></div>
+                            </>
+                          ) : (
+                            <>
+                              <div className="hidden md:block w-1/2"></div>
+                              {sectionCard}
+                            </>
+                          )}
                         </div>
                       );
                    })}
@@ -658,37 +665,53 @@ const App: React.FC = () => {
            </div>
         )}
 
-        {/* VIEW 4: LESSON DETAIL (Content) */}
+        {/* VIEW 4: MAGIC ACADEMY (Games Hub) */}
+        {currentView === ViewState.MAGIC_ACADEMY && (
+          <div className="flex-1 w-full">
+            <MagicAcademyApp
+              onBackToModule={() => setCurrentView(ViewState.MODULE_DETAIL)}
+              initialGame={magicInitialGame}
+            />
+          </div>
+        )}
+
+        {/* VIEW 5: LESSON DETAIL (Content) */}
         {currentView === ViewState.LESSON_DETAIL && selectedLesson && (
           <div className="flex flex-col lg:flex-row h-[calc(100vh-4rem)] animate-fade-in overflow-hidden">
             {/* LEFT: Content Area (Expanded) */}
             <div className="w-full lg:w-3/4 h-full overflow-y-auto p-6 lg:p-12 bg-white border-r border-gray-100 scroll-smooth">
                <div className="max-w-3xl mx-auto pb-20">
                   <div className="mb-6 border-b border-gray-100 pb-5">
-                    <div className="flex items-center justify-between mb-2">
+                    {/* 顶部：返回小节列表（与模块列表页风格一致，居中放在标题上方） */}
+                    <div className="flex justify-center mb-4">
+                      <button
+                        onClick={() => setCurrentView(ViewState.MODULE_DETAIL)}
+                        className="px-6 py-2 rounded-full bg-white border border-gray-100 text-xs font-bold text-slate-500 hover:text-slate-800 hover:shadow-md transition-all flex items-center"
+                      >
+                        <ArrowRight size={14} className="rotate-180 mr-2" />
+                        返回小节列表
+                      </button>
+                    </div>
+
+                    {/* 中部：左侧 LEARNING 徽章 + 右侧 Completed 状态 */}
+                    <div className="flex items-center justify-between mb-3">
                       {/* 左：LEARNING 徽章 */}
                       <div className="flex items-center text-[#3DDC84] text-xs font-bold bg-[#3DDC84]/10 px-3 py-1 rounded-full">
                         <BookOpen size={14} className="mr-2" />
                         <span>LEARNING</span>
                       </div>
 
-                      {/* 右：Completed 状态 + 返回按钮 */}
+                      {/* 右：Completed 状态 */}
                       <div className="flex items-center gap-3">
                         {completedLessons.has(selectedLesson.id) && (
                           <span className="flex items-center text-green-600 text-xs font-bold">
                             <CheckCircle2 size={14} className="mr-1" /> COMPLETED
                           </span>
                         )}
-                        <button
-                          onClick={() => setCurrentView(ViewState.MODULE_DETAIL)}
-                          className="inline-flex items-center text-xs text-slate-400 hover:text-slate-700 transition-colors"
-                        >
-                          <ArrowRight size={14} className="rotate-180 mr-1" />
-                          返回小节列表
-                        </button>
                       </div>
                     </div>
-                    <h1 className="text-2xl md:text-3xl font-black text-slate-800 mb-2 mt-4 leading-tight">
+
+                    <h1 className="text-2xl md:text-3xl font-black text-slate-800 mb-2 mt-1 leading-tight">
                       {selectedLesson.title}
                     </h1>
                   </div>

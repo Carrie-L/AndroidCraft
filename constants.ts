@@ -25,6 +25,22 @@ export const TOPIC_CATEGORIES: TopicCategory[] = [
     iconName: 'Layers',
     color: 'bg-orange-500',
     isComingSoon: true
+  },
+  {
+    id: 'performance',
+    title: '性能优化',
+    description: '深入内存管理与渲染机制。掌握 Profiler 调优技巧，消除卡顿，打造极致丝滑体验。',
+    iconName: 'Cat',
+    color: 'bg-pink-500',
+    isComingSoon: true
+  },
+  {
+    id: 'data-structure',
+    title: '数据结构',
+    description: '夯实计算机科学基础。从数组到图论，通过算法训练培养解决复杂问题的能力。',
+    iconName: 'List',
+    color: 'bg-green-500',
+    isComingSoon: true
   }
 ];
 
